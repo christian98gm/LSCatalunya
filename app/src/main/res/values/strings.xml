@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_name">LSCatalunya</string>
+    <string name="login">Login</string>
+    <string name="show_map">Show map</string>
+    <string name="barcelona">Barcelona</string>
+    <string name="girona">Girona</string>
+    <string name="lleida">Lleida</string>
+    <string name="tarragona">Tarragona</string>
+    <string name="all">All</string>
+    <string name="schools">Schools</string>
+    <string name="others">Others</string>
+    <string name="children">Children</string>
+    <string name="primary">Primary</string>
+    <string name="secondary">Secondary</string>
+    <string name="high_school">High school</string>
+    <string name="vocational_training">Vocational training</string>
+    <string name="university">University</string>
+    <string name="school_photo">School photo</string>
+    <string-array name="provinces">
+        <item>@string/barcelona</item>
+        <item>@string/girona</item>
+        <item>@string/lleida</item>
+        <item>@string/tarragona</item>
+    </string-array>
+</resources>

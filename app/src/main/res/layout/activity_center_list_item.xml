@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="88dp"
+    android:orientation="horizontal"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="236dp"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/centerSchoolName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto"
+            android:textSize="16sp"
+            android:textColor="@color/listItemTitle"
+            android:text="School"/>
+
+        <TextView
+            android:id="@+id/centerSchoolAddress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto"
+            android:textSize="14sp"
+            android:textColor="@color/listItemText"
+            android:text="Address"/>
+
+        <ScrollView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/centerChildren"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/holo_purple"
+                    android:fontFamily="@font/roboto"
+                    android:textSize="12sp"
+                    android:textColor="@android:color/white"
+                    android:text="@string/children"
+                    android:layout_marginStart="0dp"
+                    android:layout_marginEnd="4dp"/>
+
+                <TextView
+                    android:id="@+id/centerPrimary"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@color/yellow"
+                    android:fontFamily="@font/roboto"
+                    android:textSize="12sp"
+                    android:textColor="@android:color/white"
+                    android:text="@string/primary"
+                    android:layout_marginStart="0dp"
+                    android:layout_marginEnd="4dp"/>
+
+                <TextView
+                    android:id="@+id/centerSecondary"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/holo_orange_light"
+                    android:fontFamily="@font/roboto"
+                    android:textSize="12sp"
+                    android:textColor="@android:color/white"
+                    android:text="@string/secondary"
+                    android:layout_marginStart="0dp"
+                    android:layout_marginEnd="4dp"/>
+
+                <TextView
+                    android:id="@+id/centerHighSchool"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/holo_red_light"
+                    android:fontFamily="@font/roboto"
+                    android:textSize="12sp"
+                    android:textColor="@android:color/white"
+                    android:text="@string/high_school"
+                    android:layout_marginStart="0dp"
+                    android:layout_marginEnd="4dp"/>
+
+                <TextView
+                    android:id="@+id/centerVocationalTraining"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/holo_green_light"
+                    android:fontFamily="@font/roboto"
+                    android:textSize="12sp"
+                    android:textColor="@android:color/white"
+                    android:text="@string/vocational_training"
+                    android:layout_marginStart="0dp"
+                    android:layout_marginEnd="4dp"/>
+
+                <TextView
+                    android:id="@+id/centerUniversity"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/holo_blue_light"
+                    android:fontFamily="@font/roboto"
+                    android:textSize="12sp"
+                    android:textColor="@android:color/white"
+                    android:text="@string/children"
+                    android:layout_marginStart="0dp"
+                    android:layout_marginEnd="4dp"/>
+
+            </LinearLayout>
+
+        </ScrollView>
+
+    </LinearLayout>
+    
+    <ImageView
+        android:id="@+id/centerSchoolPhoto"
+        android:layout_width="100dp"
+        android:layout_height="56dp"
+        android:contentDescription="@string/school_photo"
+        android:layout_marginStart="20dp"/>
+
+</LinearLayout>
