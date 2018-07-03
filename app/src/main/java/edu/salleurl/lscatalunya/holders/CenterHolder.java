@@ -1,9 +1,7 @@
 package edu.salleurl.lscatalunya.holders;
 
-import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import edu.salleurl.lscatalunya.R;
@@ -11,7 +9,6 @@ import edu.salleurl.lscatalunya.R;
 public class CenterHolder extends RecyclerView.ViewHolder {
 
     //Attributes
-    private ImageView schoolImage;
     private TextView schoolName;
     private TextView schoolAddress;
     private TextView children;
@@ -23,14 +20,14 @@ public class CenterHolder extends RecyclerView.ViewHolder {
 
     public CenterHolder(View itemView) {
         super(itemView);
-        schoolName = itemView.findViewById(R.id.centerSchoolName);
-        schoolAddress = itemView.findViewById(R.id.centerSchoolAddress);
-        children = itemView.findViewById(R.id.centerChildren);
-        primary = itemView.findViewById(R.id.centerPrimary);
-        secondary = itemView.findViewById(R.id.centerSecondary);
-        highSchool = itemView.findViewById(R.id.centerHighSchool);
-        vocationalTraining = itemView.findViewById(R.id.centerVocationalTraining);
-        university = itemView.findViewById(R.id.centerUniversity);
+        schoolName = itemView.findViewById(R.id.centerSelectionSchoolName);
+        schoolAddress = itemView.findViewById(R.id.centerSelectionSchoolAddress);
+        children = itemView.findViewById(R.id.centerSelectionChildren);
+        primary = itemView.findViewById(R.id.centerSelectionPrimary);
+        secondary = itemView.findViewById(R.id.centerSelectionSecondary);
+        highSchool = itemView.findViewById(R.id.centerSelectionHighSchool);
+        vocationalTraining = itemView.findViewById(R.id.centerSelectionVocationalTraining);
+        university = itemView.findViewById(R.id.centerSelectionUniversity);
     }
 
     public void setSchoolName(String name) {

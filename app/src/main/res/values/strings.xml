@@ -21,6 +21,7 @@
     <string name="read_error">Could not read center data</string>
     <string name="add_error">Could not add school to our services</string>
     <string name="delete_error">Could not delete school from our services</string>
+    <string name="description">Description</string>
     <string-array name="provinces">
         <item>@string/barcelona</item>
         <item>@string/girona</item>

@@ -6,9 +6,8 @@
     android:layout_height="match_parent">
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/centerList"
+        android:id="@+id/centerSelectionList"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:listitem="@layout/activity_center_list_item"/>
+        android:layout_height="match_parent"/>
 
 </FrameLayout>

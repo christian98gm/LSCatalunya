@@ -1,164 +1,70 @@
 package edu.salleurl.lscatalunya.activities;
 
-import android.support.design.widget.TabLayout;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
-import android.widget.Toast;
-
-import java.util.ArrayList;
+import android.widget.TextView;
 
 import edu.salleurl.lscatalunya.R;
-import edu.salleurl.lscatalunya.adapters.TabAdapter;
-import edu.salleurl.lscatalunya.fragment.RecyclerViewFragment;
 import edu.salleurl.lscatalunya.model.Center;
-import edu.salleurl.lscatalunya.repositories.AsyncCenterRepo;
-import edu.salleurl.lscatalunya.repositories.impl.CenterWebService;
-import edu.salleurl.lscatalunya.repositories.json.JsonException;
 
-public class CenterActivity extends AppCompatActivity implements AsyncCenterRepo.Callback {
+public class CenterActivity extends AppCompatActivity {
 
-    private final static int TOTAL_TABS = 3;
+    public final static String CENTER_EXTRA = "centerExtra";
+    private final static String CENTER_KEY = "centerKey";
 
-    //Save instance keys
-    private final static String CENTERS_KEY = "centersKey";
-    private final static String ALL_KEY = "allKey";
-    private final static String SCHOOLS_KEY = "schoolsKey";
-    private final static String OTHERS_KEY = "othersKey";
-
-    //Centers list
-    private ArrayList<Center> centers;
-    private ArrayList<Center> all;
-    private ArrayList<Center> schools;
-    private ArrayList<Center> others;
-
-    //Tab entries
-    private Spinner provincesSpinner;
-    private RecyclerViewFragment[] fragments;
-    private TabAdapter tabAdapter;
+    private Center center;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_center);
 
-        //Link adapter to provinces spinner
-        ArrayAdapter<CharSequence> provincesAdapter = ArrayAdapter.createFromResource(this,
-                R.array.provinces, android.R.layout.simple_spinner_item);
-        provincesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        provincesSpinner = findViewById(R.id.centerProvinces);
-        provincesSpinner.setAdapter(provincesAdapter);
-
-        //Link listener
-        provincesSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
-                updateCenters(String.valueOf(provincesSpinner.getSelectedItem()));
-                updateTabs();
-            }
-            public void onNothingSelected(AdapterView<?> adapterView) {}
-        });
-
-        //Create tabs and adapter
-        if(savedInstanceState != null) {
-            centers = savedInstanceState.getParcelableArrayList(CENTERS_KEY);
-            all = savedInstanceState.getParcelableArrayList(ALL_KEY);
-            schools = savedInstanceState.getParcelableArrayList(SCHOOLS_KEY);
-            others = savedInstanceState.getParcelableArrayList(OTHERS_KEY);
-        } else {
-            centers = new ArrayList<>();
-            all = new ArrayList<>();
-            schools = new ArrayList<>();
-            others = new ArrayList<>();
-        }
-
-        fragments = new RecyclerViewFragment[TOTAL_TABS];
-        fragments[0] = RecyclerViewFragment.newInstance(all);
-        fragments[1] = RecyclerViewFragment.newInstance(schools);
-        fragments[2] = RecyclerViewFragment.newInstance(others);
-        String[] tabs = getResources().getStringArray(R.array.centers);
-        tabAdapter = new TabAdapter(getSupportFragmentManager(), fragments, tabs);
-
-        //Link adapter to views
-        ViewPager viewPager = findViewById(R.id.centerViewPager);
-        TabLayout tabLayout = findViewById(R.id.centerTab);
-
-        viewPager.setAdapter(tabAdapter);
-        tabLayout.setupWithViewPager(viewPager);
-
-
         if(savedInstanceState == null) {
-            CenterWebService centerWebService = new CenterWebService(this, this);
-            centerWebService.getCenters();
+            Intent intent = getIntent();
+            center = intent.getParcelableExtra(CENTER_EXTRA);
+        } else {
+            center = savedInstanceState.getParcelable(CENTER_KEY);
         }
 
-    }
+        //Set school name and address
+        TextView schoolName = findViewById(R.id.centerSchoolName);
+        schoolName.setText(center.getName());
 
-    private void updateCenters(String province) {
+        TextView schoolAddress = findViewById(R.id.centerSchoolAddress);
+        schoolAddress.setText(center.getAddress());
 
-        all.clear();
-        schools.clear();
-        others.clear();
+        //Set tags visibility
+        TextView childrenTag = findViewById(R.id.centerChildren);
+        childrenTag.setVisibility(center.hasChildren() ? View.VISIBLE : View.GONE);
 
-        for(Center center : centers) {
-            if(center.getAddress().contains(province)) {
-                all.add(center);
-                if(center.hasChildren() || center.hasPrimary() || center.hasSecondary()) {
-                    schools.add(center);
-                }
-                if(center.hasHighSchool() || center.hasVocationalTraining() ||
-                        center.hasUniversity()) {
-                    others.add(center);
-                }
-            }
-        }
+        TextView primaryTag = findViewById(R.id.centerPrimary);
+        primaryTag.setVisibility(center.hasPrimary() ? View.VISIBLE : View.GONE);
 
-    }
+        TextView secondaryTag = findViewById(R.id.centerSecondary);
+        secondaryTag.setVisibility(center.hasSecondary() ? View.VISIBLE : View.GONE);
 
-    private void updateTabs() {
-        for(int i = 0; i < TOTAL_TABS; i++) {
-            fragments[i].updatedCenters();
-        }
-        tabAdapter.notifyDataSetChanged();
-    }
+        TextView highSchoolTag = findViewById(R.id.centerHighSchool);
+        highSchoolTag.setVisibility(center.hasHighSchool() ? View.VISIBLE : View.GONE);
 
-    @Override
-    public void onResponse(ArrayList<Center> centers, int errorCode) {
-        switch(errorCode) {
-            case CenterWebService.OK:
-                //Get centers list
-                this.centers = centers;
-                //Update centers lists
-                updateCenters(String.valueOf(provincesSpinner.getSelectedItem()));
-                //Update tabs content
-                updateTabs();
-                break;
-            case CenterWebService.HTTP_ERROR:
-                Toast.makeText(this, getString(R.string.connection_error), Toast.LENGTH_LONG)
-                        .show();
-                break;
-            case JsonException.FORMAT_ERROR:
-                Toast.makeText(this, getString(R.string.format_error), Toast.LENGTH_LONG)
-                        .show();
-                break;
-            case JsonException.READ_ERROR:
-                Toast.makeText(this, getString(R.string.read_error), Toast.LENGTH_LONG)
-                        .show();
-                break;
-        }
+        TextView vocationalTrainingTag = findViewById(R.id.centerVocationalTraining);
+        vocationalTrainingTag.setVisibility(center.hasVocationalTraining() ? View.VISIBLE : View.GONE);
+
+        TextView universityTag = findViewById(R.id.centerUniversity);
+        universityTag.setVisibility(center.hasUniversity() ? View.VISIBLE : View.GONE);
+
+        //Set school description
+        TextView schoolDescription = findViewById(R.id.centerDescription);
+        schoolDescription.setText(center.getDescription());
+
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        outState.putParcelableArrayList(CENTERS_KEY, centers);
-        outState.putParcelableArrayList(ALL_KEY, all);
-        outState.putParcelableArrayList(SCHOOLS_KEY, schools);
-        outState.putParcelableArrayList(OTHERS_KEY, others);
+        outState.putParcelable(CENTER_KEY, center);
         super.onSaveInstanceState(outState);
     }
 

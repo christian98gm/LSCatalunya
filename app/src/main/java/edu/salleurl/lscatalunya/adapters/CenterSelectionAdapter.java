@@ -1,5 +1,7 @@
 package edu.salleurl.lscatalunya.adapters;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
@@ -11,31 +13,35 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 
 import edu.salleurl.lscatalunya.R;
+import edu.salleurl.lscatalunya.activities.CenterActivity;
 import edu.salleurl.lscatalunya.holders.CenterHolder;
-import edu.salleurl.lscatalunya.listeners.CenterListener;
+import edu.salleurl.lscatalunya.listeners.CenterSelectionListener;
 import edu.salleurl.lscatalunya.model.Center;
 
-public class CenterAdapter extends RecyclerView.Adapter<CenterHolder> implements Parcelable {
+public class CenterSelectionAdapter extends RecyclerView.Adapter<CenterHolder> implements Parcelable {
 
+    private Activity activity;
     private ArrayList<Center> centers;
+    private CenterSelectionListener listener;
 
-    public CenterAdapter(ArrayList<Center> centers) {
+    public CenterSelectionAdapter(Activity activity, ArrayList<Center> centers) {
+        this.activity = activity;
         this.centers = centers;
+        listener = new CenterSelectionListener(this);
     }
 
-    protected CenterAdapter(Parcel in) {
+    protected CenterSelectionAdapter(Parcel in) {
         centers = in.createTypedArrayList(Center.CREATOR);
     }
 
-    public static final Creator<CenterAdapter> CREATOR = new Creator<CenterAdapter>() {
+    public static final Creator<CenterSelectionAdapter> CREATOR = new Creator<CenterSelectionAdapter>() {
         @Override
-        public CenterAdapter createFromParcel(Parcel in) {
-            return new CenterAdapter(in);
+        public CenterSelectionAdapter createFromParcel(Parcel in) {
+            return new CenterSelectionAdapter(in);
         }
-
         @Override
-        public CenterAdapter[] newArray(int size) {
-            return new CenterAdapter[size];
+        public CenterSelectionAdapter[] newArray(int size) {
+            return new CenterSelectionAdapter[size];
         }
     };
 
@@ -44,9 +50,8 @@ public class CenterAdapter extends RecyclerView.Adapter<CenterHolder> implements
     public CenterHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         //Create layout and link listener
         View view = LayoutInflater.from(parent.getContext()).
-                inflate(R.layout.activity_center_list_item, parent, false);
-        CenterListener itemListener = new CenterListener(centers, this);
-        view.setOnClickListener(itemListener);
+                inflate(R.layout.activity_center_selection_list_item, parent, false);
+        view.setOnClickListener(listener);
         return new CenterHolder(view);
     }
 
@@ -81,6 +86,13 @@ public class CenterAdapter extends RecyclerView.Adapter<CenterHolder> implements
     @Override
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeTypedList(centers);
+    }
+
+    public void onClick(View view) {
+        Intent intent = new Intent(activity, CenterActivity.class);
+        RecyclerView rView = (RecyclerView) view.getParent();
+        intent.putExtra(CenterActivity.CENTER_EXTRA, centers.get(rView.getChildLayoutPosition(view)));
+        activity.startActivity(intent);
     }
 
 }

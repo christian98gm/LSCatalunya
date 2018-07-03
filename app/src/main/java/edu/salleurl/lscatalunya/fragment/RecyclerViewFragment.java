@@ -1,5 +1,6 @@
 package edu.salleurl.lscatalunya.fragment;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -13,17 +14,17 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 
 import edu.salleurl.lscatalunya.R;
-import edu.salleurl.lscatalunya.adapters.CenterAdapter;
+import edu.salleurl.lscatalunya.adapters.CenterSelectionAdapter;
 import edu.salleurl.lscatalunya.model.Center;
 
 public class RecyclerViewFragment extends Fragment {
 
     private final static String ADAPTER_ARG = "adapterArg";
 
-    public static RecyclerViewFragment newInstance(ArrayList<Center> centers) {
+    public static RecyclerViewFragment newInstance(ArrayList<Center> centers, Activity activity) {
         RecyclerViewFragment fragment = new RecyclerViewFragment();
         Bundle args = new Bundle();
-        args.putParcelable(ADAPTER_ARG, new CenterAdapter(centers));
+        args.putParcelable(ADAPTER_ARG, new CenterSelectionAdapter(activity, centers));
         fragment.setArguments(args);
         return fragment;
     }
@@ -33,21 +34,21 @@ public class RecyclerViewFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.activity_center_list, container, false);
-        RecyclerView recyclerView = view.findViewById(R.id.centerList);
+        View view = inflater.inflate(R.layout.activity_center_selection_list, container, false);
+        RecyclerView recyclerView = view.findViewById(R.id.centerSelectionList);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         //Create center list adapter and link it
         Bundle args = getArguments();
-        CenterAdapter centerAdapter = args.getParcelable(ADAPTER_ARG);
-        recyclerView.setAdapter(centerAdapter);
+        CenterSelectionAdapter centerSelectionAdapter = args.getParcelable(ADAPTER_ARG);
+        recyclerView.setAdapter(centerSelectionAdapter);
 
         return view;
 
     }
 
     public void updatedCenters() {
-        CenterAdapter adapter = getArguments().getParcelable(ADAPTER_ARG);
+        CenterSelectionAdapter adapter = getArguments().getParcelable(ADAPTER_ARG);
         adapter.notifyDataSetChanged();
     }
 
