@@ -1,37 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="88dp"
-    android:orientation="horizontal"
     android:padding="16dp">
 
-    <LinearLayout
-        android:layout_width="236dp"
+    <ScrollView
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_alignParentStart="true">
 
-        <TextView
-            android:id="@+id/centerSchoolName"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/roboto"
-            android:textSize="16sp"
-            android:textColor="@color/listItemTitle"
-            android:text="School"/>
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/centerSchoolAddress"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/roboto"
-            android:textSize="14sp"
-            android:textColor="@color/listItemText"
-            android:text="Address"/>
+            <TextView
+                android:id="@+id/centerSchoolName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto"
+                android:textSize="16sp"
+                android:textStyle="bold"/>
 
-        <ScrollView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/centerSchoolAddress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto"
+                android:textSize="14sp"
+                android:textStyle="normal"
+                android:maxLines="1"/>
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -112,15 +111,17 @@
 
             </LinearLayout>
 
-        </ScrollView>
+        </LinearLayout>
 
-    </LinearLayout>
-    
+    </ScrollView>
+
     <ImageView
-        android:id="@+id/centerSchoolPhoto"
         android:layout_width="100dp"
         android:layout_height="56dp"
         android:contentDescription="@string/school_photo"
-        android:layout_marginStart="20dp"/>
+        android:layout_marginStart="20dp"
+        android:scaleType="centerCrop"
+        android:layout_alignParentEnd="true"
+        android:src="@drawable/ic_item_classroom"/>
 
-</LinearLayout>
+</RelativeLayout>

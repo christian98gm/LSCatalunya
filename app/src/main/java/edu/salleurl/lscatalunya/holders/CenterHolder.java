@@ -1,6 +1,6 @@
 package edu.salleurl.lscatalunya.holders;
 
-import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
@@ -23,7 +23,6 @@ public class CenterHolder extends RecyclerView.ViewHolder {
 
     public CenterHolder(View itemView) {
         super(itemView);
-        schoolImage = itemView.findViewById(R.id.centerSchoolPhoto);
         schoolName = itemView.findViewById(R.id.centerSchoolName);
         schoolAddress = itemView.findViewById(R.id.centerSchoolAddress);
         children = itemView.findViewById(R.id.centerChildren);
@@ -32,10 +31,6 @@ public class CenterHolder extends RecyclerView.ViewHolder {
         highSchool = itemView.findViewById(R.id.centerHighSchool);
         vocationalTraining = itemView.findViewById(R.id.centerVocationalTraining);
         university = itemView.findViewById(R.id.centerUniversity);
-    }
-
-    public void setSchoolImage(Bitmap bitmap) {
-       schoolImage.setImageBitmap(bitmap);
     }
 
     public void setSchoolName(String name) {

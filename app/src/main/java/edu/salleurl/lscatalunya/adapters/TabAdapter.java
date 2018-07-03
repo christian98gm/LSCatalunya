@@ -1,53 +1,44 @@
 package edu.salleurl.lscatalunya.adapters;
 
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.view.ViewGroup;
 
-import java.util.List;
+import java.util.Map;
+
+import edu.salleurl.lscatalunya.fragment.RecyclerViewFragment;
 
 public class TabAdapter extends FragmentPagerAdapter {
 
-    public static class TabEntry {
+    private RecyclerViewFragment[] fragments;
+    private String[] titles;
 
-        private Fragment fragment;
-        private String name;
-
-        public TabEntry(Fragment fragment, String name) {
-            this.fragment = fragment;
-            this.name = name;
-        }
-
-        public Fragment getFragment() {
-            return fragment;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-    }
-
-    private List<TabEntry> entries;
-
-    public TabAdapter(FragmentManager fm, List<TabEntry> entries) {
+    public TabAdapter(FragmentManager fm, RecyclerViewFragment[] fragments, String[] titles) {
         super(fm);
-        this.entries = entries;
+        this.fragments = fragments;
+        this.titles = titles;
     }
 
     @Override
     public Fragment getItem(int position) {
-        return entries.get(position).getFragment();
+        return fragments[position];
     }
 
     @Override
     public int getCount() {
-        return entries.size();
+        return fragments.length;
     }
 
     @Override
     public CharSequence getPageTitle(int position) {
-        return entries.get(position).getName();
+        return titles[position];
+    }
+
+    @Override
+    public int getItemPosition(@NonNull Object object) {
+        return POSITION_NONE;
     }
 
 }

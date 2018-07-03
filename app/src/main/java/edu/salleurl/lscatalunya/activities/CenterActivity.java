@@ -8,14 +8,38 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
 import edu.salleurl.lscatalunya.R;
 import edu.salleurl.lscatalunya.adapters.TabAdapter;
 import edu.salleurl.lscatalunya.fragment.RecyclerViewFragment;
+import edu.salleurl.lscatalunya.model.Center;
+import edu.salleurl.lscatalunya.repositories.AsyncCenterRepo;
+import edu.salleurl.lscatalunya.repositories.impl.CenterWebService;
+import edu.salleurl.lscatalunya.repositories.json.JsonException;
 
-public class CenterActivity extends AppCompatActivity {
+public class CenterActivity extends AppCompatActivity implements AsyncCenterRepo.Callback {
+
+    private final static int TOTAL_TABS = 3;
+
+    //Save instance keys
+    private final static String CENTERS_KEY = "centersKey";
+    private final static String ALL_KEY = "allKey";
+    private final static String SCHOOLS_KEY = "schoolsKey";
+    private final static String OTHERS_KEY = "othersKey";
+
+    //Centers list
+    private ArrayList<Center> centers;
+    private ArrayList<Center> all;
+    private ArrayList<Center> schools;
+    private ArrayList<Center> others;
+
+    //Tab entries
+    private Spinner provincesSpinner;
+    private RecyclerViewFragment[] fragments;
+    private TabAdapter tabAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,27 +52,37 @@ public class CenterActivity extends AppCompatActivity {
                 R.array.provinces, android.R.layout.simple_spinner_item);
         provincesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-        Spinner provincesSpinner = findViewById(R.id.centerProvinces);
+        provincesSpinner = findViewById(R.id.centerProvinces);
         provincesSpinner.setAdapter(provincesAdapter);
 
         //Link listener
         provincesSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
-                //Province selected
+                updateCenters(String.valueOf(provincesSpinner.getSelectedItem()));
+                updateTabs();
             }
             public void onNothingSelected(AdapterView<?> adapterView) {}
         });
 
         //Create tabs and adapter
-        ArrayList<TabAdapter.TabEntry> tabEntries = new ArrayList<>();
-        tabEntries.add(new TabAdapter.TabEntry(new RecyclerViewFragment(),
-                getString(R.string.all)));
-        tabEntries.add(new TabAdapter.TabEntry(new RecyclerViewFragment(),
-                getString(R.string.schools)));
-        tabEntries.add(new TabAdapter.TabEntry(new RecyclerViewFragment(),
-                getString(R.string.others)));
+        if(savedInstanceState != null) {
+            centers = savedInstanceState.getParcelableArrayList(CENTERS_KEY);
+            all = savedInstanceState.getParcelableArrayList(ALL_KEY);
+            schools = savedInstanceState.getParcelableArrayList(SCHOOLS_KEY);
+            others = savedInstanceState.getParcelableArrayList(OTHERS_KEY);
+        } else {
+            centers = new ArrayList<>();
+            all = new ArrayList<>();
+            schools = new ArrayList<>();
+            others = new ArrayList<>();
+        }
 
-        TabAdapter tabAdapter = new TabAdapter(getSupportFragmentManager(), tabEntries);
+        fragments = new RecyclerViewFragment[TOTAL_TABS];
+        fragments[0] = RecyclerViewFragment.newInstance(all);
+        fragments[1] = RecyclerViewFragment.newInstance(schools);
+        fragments[2] = RecyclerViewFragment.newInstance(others);
+        String[] tabs = getResources().getStringArray(R.array.centers);
+        tabAdapter = new TabAdapter(getSupportFragmentManager(), fragments, tabs);
 
         //Link adapter to views
         ViewPager viewPager = findViewById(R.id.centerViewPager);
@@ -57,6 +91,75 @@ public class CenterActivity extends AppCompatActivity {
         viewPager.setAdapter(tabAdapter);
         tabLayout.setupWithViewPager(viewPager);
 
+
+        if(savedInstanceState == null) {
+            CenterWebService centerWebService = new CenterWebService(this, this);
+            centerWebService.getCenters();
+        }
+
+    }
+
+    private void updateCenters(String province) {
+
+        all.clear();
+        schools.clear();
+        others.clear();
+
+        for(Center center : centers) {
+            if(center.getAddress().contains(province)) {
+                all.add(center);
+                if(center.hasChildren() || center.hasPrimary() || center.hasSecondary()) {
+                    schools.add(center);
+                }
+                if(center.hasHighSchool() || center.hasVocationalTraining() ||
+                        center.hasUniversity()) {
+                    others.add(center);
+                }
+            }
+        }
+
+    }
+
+    private void updateTabs() {
+        for(int i = 0; i < TOTAL_TABS; i++) {
+            fragments[i].updatedCenters();
+        }
+        tabAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onResponse(ArrayList<Center> centers, int errorCode) {
+        switch(errorCode) {
+            case CenterWebService.OK:
+                //Get centers list
+                this.centers = centers;
+                //Update centers lists
+                updateCenters(String.valueOf(provincesSpinner.getSelectedItem()));
+                //Update tabs content
+                updateTabs();
+                break;
+            case CenterWebService.HTTP_ERROR:
+                Toast.makeText(this, getString(R.string.connection_error), Toast.LENGTH_LONG)
+                        .show();
+                break;
+            case JsonException.FORMAT_ERROR:
+                Toast.makeText(this, getString(R.string.format_error), Toast.LENGTH_LONG)
+                        .show();
+                break;
+            case JsonException.READ_ERROR:
+                Toast.makeText(this, getString(R.string.read_error), Toast.LENGTH_LONG)
+                        .show();
+                break;
+        }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putParcelableArrayList(CENTERS_KEY, centers);
+        outState.putParcelableArrayList(ALL_KEY, all);
+        outState.putParcelableArrayList(SCHOOLS_KEY, schools);
+        outState.putParcelableArrayList(OTHERS_KEY, others);
+        super.onSaveInstanceState(outState);
     }
 
 }

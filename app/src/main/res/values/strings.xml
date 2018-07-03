@@ -16,10 +16,20 @@
     <string name="vocational_training">Vocational training</string>
     <string name="university">University</string>
     <string name="school_photo">School photo</string>
+    <string name="connection_error">Could not connect to our services</string>
+    <string name="format_error">Center data is corrupted</string>
+    <string name="read_error">Could not read center data</string>
+    <string name="add_error">Could not add school to our services</string>
+    <string name="delete_error">Could not delete school from our services</string>
     <string-array name="provinces">
         <item>@string/barcelona</item>
         <item>@string/girona</item>
         <item>@string/lleida</item>
         <item>@string/tarragona</item>
+    </string-array>
+    <string-array name="centers">
+        <item>@string/all</item>
+        <item>@string/schools</item>
+        <item>@string/others</item>
     </string-array>
 </resources>
