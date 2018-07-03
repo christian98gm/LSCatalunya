@@ -6,12 +6,13 @@
     android:padding="16dp"
     android:background="?android:attr/selectableItemBackground">
 
-
-
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:id="@+id/centerSelectionContent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_alignParentStart="true"
+        android:layout_toStartOf="@id/centerSelectionPhoto">
 
         <TextView
             android:id="@+id/centerSelectionSchoolName"
@@ -19,7 +20,8 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/roboto"
             android:textSize="16sp"
-            android:textStyle="bold"/>
+            android:textStyle="bold"
+            android:singleLine="true"/>
 
         <TextView
             android:id="@+id/centerSelectionSchoolAddress"
@@ -28,7 +30,7 @@
             android:fontFamily="@font/roboto"
             android:textSize="14sp"
             android:textStyle="normal"
-            android:maxLines="1"/>
+            android:singleLine="true"/>
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -45,7 +47,8 @@
                 android:textColor="@android:color/white"
                 android:text="@string/children"
                 android:layout_marginStart="0dp"
-                android:layout_marginEnd="4dp"/>
+                android:layout_marginEnd="4dp"
+                android:singleLine="true"/>
 
             <TextView
                 android:id="@+id/centerSelectionPrimary"
@@ -57,7 +60,8 @@
                 android:textColor="@android:color/white"
                 android:text="@string/primary"
                 android:layout_marginStart="0dp"
-                android:layout_marginEnd="4dp"/>
+                android:layout_marginEnd="4dp"
+                android:singleLine="true"/>
 
             <TextView
                 android:id="@+id/centerSelectionSecondary"
@@ -69,7 +73,8 @@
                 android:textColor="@android:color/white"
                 android:text="@string/secondary"
                 android:layout_marginStart="0dp"
-                android:layout_marginEnd="4dp"/>
+                android:layout_marginEnd="4dp"
+                android:singleLine="true"/>
 
             <TextView
                 android:id="@+id/centerSelectionHighSchool"
@@ -81,7 +86,8 @@
                 android:textColor="@android:color/white"
                 android:text="@string/high_school"
                 android:layout_marginStart="0dp"
-                android:layout_marginEnd="4dp"/>
+                android:layout_marginEnd="4dp"
+                android:singleLine="true"/>
 
             <TextView
                 android:id="@+id/centerSelectionVocationalTraining"
@@ -93,7 +99,8 @@
                 android:textColor="@android:color/white"
                 android:text="@string/vocational_training"
                 android:layout_marginStart="0dp"
-                android:layout_marginEnd="4dp"/>
+                android:layout_marginEnd="4dp"
+                android:singleLine="true"/>
 
             <TextView
                 android:id="@+id/centerSelectionUniversity"
@@ -105,19 +112,21 @@
                 android:textColor="@android:color/white"
                 android:text="@string/university"
                 android:layout_marginStart="0dp"
-                android:layout_marginEnd="4dp"/>
+                android:layout_marginEnd="4dp"
+                android:singleLine="true"/>
 
         </LinearLayout>
 
     </LinearLayout>
 
     <ImageView
+        android:id="@+id/centerSelectionPhoto"
         android:layout_width="100dp"
         android:layout_height="56dp"
         android:contentDescription="@string/school_photo"
         android:layout_marginStart="20dp"
         android:scaleType="centerCrop"
-        android:layout_alignParentEnd="true"
-        android:src="@drawable/ic_item_classroom"/>
+        android:src="@drawable/ic_item_classroom"
+        android:layout_alignParentEnd="true"/>
 
 </RelativeLayout>

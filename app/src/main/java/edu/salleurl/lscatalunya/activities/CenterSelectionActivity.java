@@ -1,12 +1,15 @@
 package edu.salleurl.lscatalunya.activities;
 
+import android.content.res.Configuration;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -91,7 +94,7 @@ public class CenterSelectionActivity extends AppCompatActivity implements AsyncC
         viewPager.setAdapter(tabAdapter);
         tabLayout.setupWithViewPager(viewPager);
 
-
+        //Get center data
         if(savedInstanceState == null) {
             CenterWebService centerWebService = new CenterWebService(this, this);
             centerWebService.getCenters();
