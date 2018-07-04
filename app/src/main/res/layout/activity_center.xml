@@ -175,6 +175,7 @@
         android:layout_margin="16dp"
         android:src="@drawable/ic_menu_map"
         app:layout_anchor="@id/centerSchoolImage"
-        app:layout_anchorGravity="bottom|right|end"/>
+        app:layout_anchorGravity="bottom|right|end"
+        android:onClick="showMap"/>
 
 </android.support.design.widget.CoordinatorLayout>

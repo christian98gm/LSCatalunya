@@ -7,6 +7,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 import edu.salleurl.lscatalunya.R;
 import edu.salleurl.lscatalunya.model.Center;
 
@@ -15,6 +17,10 @@ public class CenterActivity extends AppCompatActivity {
     public final static String CENTER_EXTRA = "centerExtra";
     private final static String CENTER_KEY = "centerKey";
 
+    public final static String CENTERS_EXTRA = "centersExtra";
+    private final static String CENTERS_KEY = "centersKey";
+
+    private ArrayList<Center> centers;
     private Center center;
 
     @Override
@@ -25,8 +31,10 @@ public class CenterActivity extends AppCompatActivity {
 
         if(savedInstanceState == null) {
             Intent intent = getIntent();
+            centers = intent.getParcelableArrayListExtra(CENTERS_EXTRA);
             center = intent.getParcelableExtra(CENTER_EXTRA);
         } else {
+            centers = savedInstanceState.getParcelableArrayList(CENTERS_KEY);
             center = savedInstanceState.getParcelable(CENTER_KEY);
         }
 
@@ -62,8 +70,17 @@ public class CenterActivity extends AppCompatActivity {
 
     }
 
+    public void showMap(View view) {
+        Intent intent = new Intent(this, MapActivity.class);
+        intent.putExtra(MapActivity.CENTERS_EXTRA, centers);
+        intent.putExtra(MapActivity.ADDRESS_EXTRA, center.getAddress());
+        startActivity(intent);
+        finish();
+    }
+
     @Override
     protected void onSaveInstanceState(Bundle outState) {
+        outState.putParcelableArrayList(CENTERS_KEY, centers);
         outState.putParcelable(CENTER_KEY, center);
         super.onSaveInstanceState(outState);
     }

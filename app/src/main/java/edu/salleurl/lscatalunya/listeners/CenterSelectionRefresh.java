@@ -42,7 +42,11 @@ public class CenterSelectionRefresh implements SwipeRefreshLayout.OnRefreshListe
 
     @Override
     public void onRefresh() {
-        activity.getCentersData();
+        if(activity.isLoading()) {
+            view.setRefreshing(false);
+        } else {
+            activity.getCentersData();
+        }
     }
 
     @Override

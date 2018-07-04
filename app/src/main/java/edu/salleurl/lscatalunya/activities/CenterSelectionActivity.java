@@ -1,5 +1,6 @@
 package edu.salleurl.lscatalunya.activities;
 
+import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -29,6 +30,7 @@ public class CenterSelectionActivity extends AppCompatActivity implements AsyncC
     private final static String ALL_KEY = "allKey";
     private final static String SCHOOLS_KEY = "schoolsKey";
     private final static String OTHERS_KEY = "othersKey";
+    private final static String LOADING_KEY = "loadingKey";
 
     //Centers list
     private ArrayList<Center> centers;
@@ -40,8 +42,8 @@ public class CenterSelectionActivity extends AppCompatActivity implements AsyncC
     private Spinner provincesSpinner;
     private RecyclerViewFragment[] fragments;
     private TabAdapter tabAdapter;
-    private android.widget.ProgressBar progressBar;
     private CenterWebService centerWebService;
+    private boolean isLoading;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,11 +74,13 @@ public class CenterSelectionActivity extends AppCompatActivity implements AsyncC
             all = savedInstanceState.getParcelableArrayList(ALL_KEY);
             schools = savedInstanceState.getParcelableArrayList(SCHOOLS_KEY);
             others = savedInstanceState.getParcelableArrayList(OTHERS_KEY);
+            isLoading = savedInstanceState.getBoolean(LOADING_KEY);
         } else {
             centers = new ArrayList<>();
             all = new ArrayList<>();
             schools = new ArrayList<>();
             others = new ArrayList<>();
+            isLoading = false;
         }
 
         //Link fragments
@@ -84,7 +88,7 @@ public class CenterSelectionActivity extends AppCompatActivity implements AsyncC
         fragments[0] = RecyclerViewFragment.newInstance(all, this);
         fragments[1] = RecyclerViewFragment.newInstance(schools, this);
         fragments[2] = RecyclerViewFragment.newInstance(others,this);
-        String[] tabs = getResources().getStringArray(R.array.centers);
+        String[] tabs = getResources().getStringArray(R.array.center_types);
         tabAdapter = new TabAdapter(getSupportFragmentManager(), fragments, tabs);
 
         //Link adapter to views
@@ -94,20 +98,23 @@ public class CenterSelectionActivity extends AppCompatActivity implements AsyncC
         viewPager.setAdapter(tabAdapter);
         tabLayout.setupWithViewPager(viewPager);
 
-        //Get progressbar
-        progressBar = findViewById(R.id.centerSelectionProgressBar);
-
         //Get center data
         if(savedInstanceState == null) {
-            progressBar.setVisibility(View.VISIBLE);
+            Toast.makeText(this, getString(R.string.loading_centers), Toast.LENGTH_SHORT).
+                    show();
             centerWebService = new CenterWebService(this, this);
             getCentersData();
         }
 
     }
 
+    public boolean isLoading() {
+        return isLoading;
+    }
+
     public void getCentersData() {
-        if(progressBar.getVisibility() == View.GONE) {
+        if(!isLoading) {
+            isLoading = true;
             centers.clear();
             centerWebService.getCenters();
         }
@@ -141,6 +148,20 @@ public class CenterSelectionActivity extends AppCompatActivity implements AsyncC
         tabAdapter.notifyDataSetChanged();
     }
 
+    public void showMap(View view) {
+        if(!isLoading) {
+            Intent intent = new Intent(this, MapActivity.class);
+            intent.putExtra(MapActivity.CENTERS_EXTRA, centers);
+            startActivity(intent);
+        } else {
+            Toast.makeText(this, getString(R.string.wait_loading), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public void showLogin(View view) {
+        Toast.makeText(this, "In progress...", Toast.LENGTH_SHORT).show();
+    }
+
     @Override
     public void onResponse(Center center, int errorCode, boolean endInformation) {
         switch(errorCode) {
@@ -151,20 +172,20 @@ public class CenterSelectionActivity extends AppCompatActivity implements AsyncC
                 updateTabs();
                 break;
             case CenterWebService.HTTP_ERROR:
-                Toast.makeText(this, getString(R.string.connection_error), Toast.LENGTH_LONG)
+                Toast.makeText(this, getString(R.string.connection_error), Toast.LENGTH_SHORT)
                         .show();
                 break;
             case JsonException.FORMAT_ERROR:
-                Toast.makeText(this, getString(R.string.format_error), Toast.LENGTH_LONG)
+                Toast.makeText(this, getString(R.string.format_error), Toast.LENGTH_SHORT)
                         .show();
                 break;
             case JsonException.READ_ERROR:
-                Toast.makeText(this, getString(R.string.read_error), Toast.LENGTH_LONG)
+                Toast.makeText(this, getString(R.string.read_error), Toast.LENGTH_SHORT)
                         .show();
                 break;
         }
         if(endInformation) {
-            progressBar.setVisibility(View.GONE);
+            isLoading = false;
         }
     }
 
@@ -174,6 +195,7 @@ public class CenterSelectionActivity extends AppCompatActivity implements AsyncC
         outState.putParcelableArrayList(ALL_KEY, all);
         outState.putParcelableArrayList(SCHOOLS_KEY, schools);
         outState.putParcelableArrayList(OTHERS_KEY, others);
+        outState.putBoolean(LOADING_KEY, isLoading);
         super.onSaveInstanceState(outState);
     }
 

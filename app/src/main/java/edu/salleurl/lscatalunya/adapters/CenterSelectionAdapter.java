@@ -91,6 +91,7 @@ public class CenterSelectionAdapter extends RecyclerView.Adapter<CenterHolder> i
     public void onClick(View view) {
         Intent intent = new Intent(activity, CenterActivity.class);
         RecyclerView rView = (RecyclerView) view.getParent();
+        intent.putExtra(CenterActivity.CENTERS_EXTRA, centers);
         intent.putExtra(CenterActivity.CENTER_EXTRA, centers.get(rView.getChildLayoutPosition(view)));
         activity.startActivity(intent);
     }
