@@ -34,37 +34,40 @@ public class JsonManager {
         }
     }
 
-    public ArrayList<Center> getCenters() throws JsonException {
+    public Center getCenter(int position) throws JsonException {
 
-        ArrayList<Center> centers = new ArrayList<>();
+        Center center = new Center();
 
         try {
-
             JSONArray jsonArray = jsonObject.getJSONArray(MESSAGE_PARAM);
-            int totalCenters = jsonArray.length();
-
-            for(int i = 0; i < totalCenters; i++) {
-                JSONObject jsonObject = jsonArray.getJSONObject(i);
-                Center center = new Center();
-                center.setId(jsonObject.getLong(ID_PARAM));
-                center.setName(jsonObject.getString(SCHOOL_NAME_PARAM));
-                center.setAddress(jsonObject.getString(SCHOOL_ADDRESS_PARAM));
-                center.setChildren(jsonObject.getInt(CHILDREN_PARAM) == 1);
-                center.setPrimary(jsonObject.getInt(PRIMARY_PARAM) == 1);
-                center.setSecondary(jsonObject.getInt(SECONDARY_PARAM) == 1);
-                center.setHighSchool(jsonObject.getInt(HIGH_SCHOOL_PARAM) == 1);
-                center.setVocationalTraining(jsonObject.getInt(VOCATIONAL_TRAINING_PARAM) == 1);
-                center.setUniversity(jsonObject.getInt(UNIVERSITY_PARAM) == 1);
-                center.setDescription(jsonObject.getString(DESCRIPTION_PARAM));
-                centers.add(center);
-            }
-
+            JSONObject jsonObject = jsonArray.getJSONObject(position);
+            center.setId(jsonObject.getLong(ID_PARAM));
+            center.setName(jsonObject.getString(SCHOOL_NAME_PARAM));
+            center.setAddress(jsonObject.getString(SCHOOL_ADDRESS_PARAM));
+            center.setChildren(jsonObject.getInt(CHILDREN_PARAM) == 1);
+            center.setPrimary(jsonObject.getInt(PRIMARY_PARAM) == 1);
+            center.setSecondary(jsonObject.getInt(SECONDARY_PARAM) == 1);
+            center.setHighSchool(jsonObject.getInt(HIGH_SCHOOL_PARAM) == 1);
+            center.setVocationalTraining(jsonObject.getInt(VOCATIONAL_TRAINING_PARAM) == 1);
+            center.setUniversity(jsonObject.getInt(UNIVERSITY_PARAM) == 1);
+            center.setDescription(jsonObject.getString(DESCRIPTION_PARAM));
         } catch(JSONException e) {
             throw new JsonException(JsonException.READ_ERROR);
         }
 
-        return centers;
+        return center;
 
+    }
+
+    public int getTotalCenters() throws JsonException {
+        int totalCenters;
+        try {
+            JSONArray jsonArray = jsonObject.getJSONArray(MESSAGE_PARAM);
+            totalCenters = jsonArray.length();
+        } catch(JSONException e) {
+            throw new JsonException(JsonException.READ_ERROR);
+        }
+        return totalCenters;
     }
 
 }

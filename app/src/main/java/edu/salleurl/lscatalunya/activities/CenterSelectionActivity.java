@@ -1,15 +1,12 @@
 package edu.salleurl.lscatalunya.activities;
 
-import android.content.res.Configuration;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -39,10 +36,12 @@ public class CenterSelectionActivity extends AppCompatActivity implements AsyncC
     private ArrayList<Center> schools;
     private ArrayList<Center> others;
 
-    //Tab entries
+    //Attributes
     private Spinner provincesSpinner;
     private RecyclerViewFragment[] fragments;
     private TabAdapter tabAdapter;
+    private android.widget.ProgressBar progressBar;
+    private CenterWebService centerWebService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +79,7 @@ public class CenterSelectionActivity extends AppCompatActivity implements AsyncC
             others = new ArrayList<>();
         }
 
+        //Link fragments
         fragments = new RecyclerViewFragment[TOTAL_TABS];
         fragments[0] = RecyclerViewFragment.newInstance(all, this);
         fragments[1] = RecyclerViewFragment.newInstance(schools, this);
@@ -94,12 +94,23 @@ public class CenterSelectionActivity extends AppCompatActivity implements AsyncC
         viewPager.setAdapter(tabAdapter);
         tabLayout.setupWithViewPager(viewPager);
 
+        //Get progressbar
+        progressBar = findViewById(R.id.centerSelectionProgressBar);
+
         //Get center data
         if(savedInstanceState == null) {
-            CenterWebService centerWebService = new CenterWebService(this, this);
-            centerWebService.getCenters();
+            progressBar.setVisibility(View.VISIBLE);
+            centerWebService = new CenterWebService(this, this);
+            getCentersData();
         }
 
+    }
+
+    public void getCentersData() {
+        if(progressBar.getVisibility() == View.GONE) {
+            centers.clear();
+            centerWebService.getCenters();
+        }
     }
 
     private void updateCenters(String province) {
@@ -131,14 +142,12 @@ public class CenterSelectionActivity extends AppCompatActivity implements AsyncC
     }
 
     @Override
-    public void onResponse(ArrayList<Center> centers, int errorCode) {
+    public void onResponse(Center center, int errorCode, boolean endInformation) {
         switch(errorCode) {
             case CenterWebService.OK:
-                //Get centers list
-                this.centers.addAll(centers);
-                //Update centers lists
+                //Update data and views
+                centers.add(center);
                 updateCenters(String.valueOf(provincesSpinner.getSelectedItem()));
-                //Update tabs content
                 updateTabs();
                 break;
             case CenterWebService.HTTP_ERROR:
@@ -153,6 +162,9 @@ public class CenterSelectionActivity extends AppCompatActivity implements AsyncC
                 Toast.makeText(this, getString(R.string.read_error), Toast.LENGTH_LONG)
                         .show();
                 break;
+        }
+        if(endInformation) {
+            progressBar.setVisibility(View.GONE);
         }
     }
 

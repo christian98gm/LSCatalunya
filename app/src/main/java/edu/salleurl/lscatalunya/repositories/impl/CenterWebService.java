@@ -54,20 +54,21 @@ public class CenterWebService implements AsyncCenterRepo {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        int errorCode = OK;
-                        ArrayList<Center> list = null;
                         try {
                             JsonManager jsonManager = new JsonManager(fixEncoding(response));
-                            list = jsonManager.getCenters();
+                            int totalCenters = jsonManager.getTotalCenters();
+                            for(int i = 0; i < jsonManager.getTotalCenters(); i++) {
+                                callback.onResponse(jsonManager.getCenter(i), OK,
+                                        i == (totalCenters - 1));
+                            }
                         } catch(JsonException e) {
-                            errorCode = e.getErrorCode();
+                            callback.onResponse(null, e.getErrorCode(), true);
                         }
-                        callback.onResponse(list, errorCode);
                     }
                 }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        callback.onResponse(null, HTTP_ERROR);
+                        callback.onResponse(null, HTTP_ERROR, true);
                     }
                 });
         requestQueue.add(request);
