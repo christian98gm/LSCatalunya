@@ -23,8 +23,8 @@ public class RecyclerViewFragment extends Fragment {
     private final static String ADAPTER_ARG = "adapterArg";
     private final static String REFRESH_ARG = "refreshArg";
 
-    public static RecyclerViewFragment newInstance(ArrayList<Center> centers,
-                                                   CenterSelectionActivity activity) {
+    public static RecyclerViewFragment newInstance(CenterSelectionActivity activity,
+                                                   ArrayList<Center> centers) {
         RecyclerViewFragment fragment = new RecyclerViewFragment();
         Bundle args = new Bundle();
         args.putParcelable(ADAPTER_ARG, new CenterSelectionAdapter(activity, centers));
@@ -39,7 +39,8 @@ public class RecyclerViewFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
 
         //View management
-        View view = inflater.inflate(R.layout.activity_center_selection_list, container, false);
+        View view = inflater.inflate(R.layout.activity_center_selection_list, container,
+                false);
         RecyclerView recyclerView = view.findViewById(R.id.centerSelectionList);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         android.support.v4.widget.SwipeRefreshLayout swipeRefreshLayout =

@@ -34,11 +34,12 @@ import java.util.Locale;
 
 import edu.salleurl.lscatalunya.R;
 import edu.salleurl.lscatalunya.model.Center;
+import edu.salleurl.lscatalunya.model.CenterManager;
 
 public class MapActivity extends AppCompatActivity implements OnMapReadyCallback {
 
-    public final static String CENTERS_EXTRA = "centersExtra";
     public final static String ADDRESS_EXTRA = "addressExtra";
+    private final static String POSITION_KEY = "positionKey";
 
     private final static int LOCATION_PERMISSION = 4718;
 
@@ -49,20 +50,15 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private final static float CATALONIA_ZOOM = 6.8f;
     private final static float ADDRESS_ZOOM = 15.0f;
 
-    private final static String ALL_KEY = "allKey";
-    private final static String SCHOOLS_KEY = "schoolsKey";
-    private final static String OTHERS_KEY = "othersKey";
-    private final static String POSITION_KEY = "positionKey";
-
     //Data
-    private ArrayList<Center> all;
-    private ArrayList<Center> schools;
-    private ArrayList<Center> others;
     private GoogleMap map;
     private CameraPosition cameraPosition;
 
     //Views
     private Spinner centerTypes;
+
+    //Center manager
+    private CenterManager centerManager;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -71,19 +67,12 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         setContentView(R.layout.activity_map);
 
         //Get data
+        centerManager = CenterManager.getInstance();
         if(savedInstanceState != null) {
-            all = savedInstanceState.getParcelableArrayList(ALL_KEY);
-            schools = savedInstanceState.getParcelableArrayList(SCHOOLS_KEY);
-            others = savedInstanceState.getParcelableArrayList(OTHERS_KEY);
             cameraPosition = savedInstanceState.getParcelable(POSITION_KEY);
         } else {
 
             Intent intent = getIntent();
-            ArrayList<Center> centers = intent.getParcelableArrayListExtra(CENTERS_EXTRA);
-            all = new ArrayList<>();
-            schools = new ArrayList<>();
-            others = new ArrayList<>();
-            updateCenters(centers);
             cameraPosition = new CameraPosition.Builder().target(new LatLng(CATALONIA_LAT,
                     CATALONIA_LON)).zoom(CATALONIA_ZOOM).build();
 
@@ -125,33 +114,14 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     }
 
-    private void updateCenters(ArrayList<Center> centers) {
-
-        all.clear();
-        schools.clear();
-        others.clear();
-
-        for(Center center : centers) {
-            all.add(center);
-            if(center.hasChildren() || center.hasPrimary() || center.hasSecondary()) {
-                schools.add(center);
-            }
-            if(center.hasHighSchool() || center.hasVocationalTraining() ||
-                    center.hasUniversity()) {
-                others.add(center);
-            }
-        }
-
-    }
-
     private void updateMapMarkers() {
         ArrayList<Center> centers = new ArrayList<>();
         if(String.valueOf(centerTypes.getSelectedItem()).equals(getString(R.string.all))) {
-            centers = all;
+            centers = centerManager.getCenters();
         } else if(String.valueOf(centerTypes.getSelectedItem()).equals(getString(R.string.schools))) {
-            centers = schools;
+            centers = centerManager.getSchools();
         } else if(String.valueOf(centerTypes.getSelectedItem()).equals(getString(R.string.others))) {
-            centers = others;
+            centers = centerManager.getOthers();
         }
         setMarkers(centers);
     }
@@ -227,9 +197,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        outState.putParcelableArrayList(ALL_KEY, all);
-        outState.putParcelableArrayList(SCHOOLS_KEY, schools);
-        outState.putParcelableArrayList(OTHERS_KEY, others);
         outState.putParcelable(POSITION_KEY, map.getCameraPosition());
         super.onSaveInstanceState(outState);
     }

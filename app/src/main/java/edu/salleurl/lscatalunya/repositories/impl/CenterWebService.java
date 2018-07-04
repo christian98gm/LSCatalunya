@@ -1,7 +1,6 @@
 package edu.salleurl.lscatalunya.repositories.impl;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -11,9 +10,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
 
-import edu.salleurl.lscatalunya.model.Center;
 import edu.salleurl.lscatalunya.repositories.AsyncCenterRepo;
 import edu.salleurl.lscatalunya.repositories.json.JsonException;
 import edu.salleurl.lscatalunya.repositories.json.JsonManager;

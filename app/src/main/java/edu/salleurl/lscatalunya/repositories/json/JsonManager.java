@@ -4,8 +4,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-
 import edu.salleurl.lscatalunya.model.Center;
 
 public class JsonManager {

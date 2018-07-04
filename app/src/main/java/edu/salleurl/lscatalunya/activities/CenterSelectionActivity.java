@@ -11,12 +11,11 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import java.util.ArrayList;
-
 import edu.salleurl.lscatalunya.R;
 import edu.salleurl.lscatalunya.adapters.TabAdapter;
 import edu.salleurl.lscatalunya.fragment.RecyclerViewFragment;
 import edu.salleurl.lscatalunya.model.Center;
+import edu.salleurl.lscatalunya.model.CenterManager;
 import edu.salleurl.lscatalunya.repositories.AsyncCenterRepo;
 import edu.salleurl.lscatalunya.repositories.impl.CenterWebService;
 import edu.salleurl.lscatalunya.repositories.json.JsonException;
@@ -26,23 +25,18 @@ public class CenterSelectionActivity extends AppCompatActivity implements AsyncC
     private final static int TOTAL_TABS = 3;
 
     //Save instance keys
-    private final static String CENTERS_KEY = "centersKey";
-    private final static String ALL_KEY = "allKey";
-    private final static String SCHOOLS_KEY = "schoolsKey";
-    private final static String OTHERS_KEY = "othersKey";
     private final static String LOADING_KEY = "loadingKey";
 
-    //Centers list
-    private ArrayList<Center> centers;
-    private ArrayList<Center> all;
-    private ArrayList<Center> schools;
-    private ArrayList<Center> others;
+    //Managers
+    private CenterManager centerManager;
+    private CenterWebService centerWebService;
 
-    //Attributes
+    //Views
     private Spinner provincesSpinner;
+
+    //Others
     private RecyclerViewFragment[] fragments;
     private TabAdapter tabAdapter;
-    private CenterWebService centerWebService;
     private boolean isLoading;
 
     @Override
@@ -50,6 +44,9 @@ public class CenterSelectionActivity extends AppCompatActivity implements AsyncC
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_center_selection);
+
+        //Get center manager
+        centerManager = CenterManager.getInstance();
 
         //Link adapter to provinces spinner
         ArrayAdapter<CharSequence> provincesAdapter = ArrayAdapter.createFromResource(this,
@@ -62,32 +59,20 @@ public class CenterSelectionActivity extends AppCompatActivity implements AsyncC
         //Link listener
         provincesSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
-                updateCenters(String.valueOf(provincesSpinner.getSelectedItem()));
+                centerManager.setProvince(String.valueOf(provincesSpinner.getSelectedItem()));
                 updateTabs();
             }
             public void onNothingSelected(AdapterView<?> adapterView) {}
         });
 
         //Create tabs and adapter
-        if(savedInstanceState != null) {
-            centers = savedInstanceState.getParcelableArrayList(CENTERS_KEY);
-            all = savedInstanceState.getParcelableArrayList(ALL_KEY);
-            schools = savedInstanceState.getParcelableArrayList(SCHOOLS_KEY);
-            others = savedInstanceState.getParcelableArrayList(OTHERS_KEY);
-            isLoading = savedInstanceState.getBoolean(LOADING_KEY);
-        } else {
-            centers = new ArrayList<>();
-            all = new ArrayList<>();
-            schools = new ArrayList<>();
-            others = new ArrayList<>();
-            isLoading = false;
-        }
+        isLoading = savedInstanceState != null && savedInstanceState.getBoolean(LOADING_KEY);
 
         //Link fragments
         fragments = new RecyclerViewFragment[TOTAL_TABS];
-        fragments[0] = RecyclerViewFragment.newInstance(all, this);
-        fragments[1] = RecyclerViewFragment.newInstance(schools, this);
-        fragments[2] = RecyclerViewFragment.newInstance(others,this);
+        fragments[0] = RecyclerViewFragment.newInstance(this, centerManager.getCentersIn());
+        fragments[1] = RecyclerViewFragment.newInstance(this, centerManager.getSchoolsIn());
+        fragments[2] = RecyclerViewFragment.newInstance(this, centerManager.getOthersIn());
         String[] tabs = getResources().getStringArray(R.array.center_types);
         tabAdapter = new TabAdapter(getSupportFragmentManager(), fragments, tabs);
 
@@ -115,43 +100,21 @@ public class CenterSelectionActivity extends AppCompatActivity implements AsyncC
     public void getCentersData() {
         if(!isLoading) {
             isLoading = true;
-            centers.clear();
+            centerManager.clear();  //TODO: Check if clear is ok
             centerWebService.getCenters();
         }
     }
 
-    private void updateCenters(String province) {
-
-        all.clear();
-        schools.clear();
-        others.clear();
-
-        for(Center center : centers) {
-            if(center.getAddress().contains(province)) {
-                all.add(center);
-                if(center.hasChildren() || center.hasPrimary() || center.hasSecondary()) {
-                    schools.add(center);
-                }
-                if(center.hasHighSchool() || center.hasVocationalTraining() ||
-                        center.hasUniversity()) {
-                    others.add(center);
-                }
-            }
-        }
-
-    }
-
     private void updateTabs() {
-        for(int i = 0; i < TOTAL_TABS; i++) {
-            fragments[i].updatedCenters();
-        }
+        fragments[0].updatedCenters();
+        fragments[1].updatedCenters();
+        fragments[2].updatedCenters();
         tabAdapter.notifyDataSetChanged();
     }
 
     public void showMap(View view) {
         if(!isLoading) {
             Intent intent = new Intent(this, MapActivity.class);
-            intent.putExtra(MapActivity.CENTERS_EXTRA, centers);
             startActivity(intent);
         } else {
             Toast.makeText(this, getString(R.string.wait_loading), Toast.LENGTH_SHORT).show();
@@ -167,8 +130,7 @@ public class CenterSelectionActivity extends AppCompatActivity implements AsyncC
         switch(errorCode) {
             case CenterWebService.OK:
                 //Update data and views
-                centers.add(center);
-                updateCenters(String.valueOf(provincesSpinner.getSelectedItem()));
+                centerManager.addCenter(center);
                 updateTabs();
                 break;
             case CenterWebService.HTTP_ERROR:
@@ -191,10 +153,6 @@ public class CenterSelectionActivity extends AppCompatActivity implements AsyncC
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        outState.putParcelableArrayList(CENTERS_KEY, centers);
-        outState.putParcelableArrayList(ALL_KEY, all);
-        outState.putParcelableArrayList(SCHOOLS_KEY, schools);
-        outState.putParcelableArrayList(OTHERS_KEY, others);
         outState.putBoolean(LOADING_KEY, isLoading);
         super.onSaveInstanceState(outState);
     }

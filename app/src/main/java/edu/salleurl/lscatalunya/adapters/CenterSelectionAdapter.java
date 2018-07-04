@@ -1,6 +1,5 @@
 package edu.salleurl.lscatalunya.adapters;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -9,22 +8,24 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
 import edu.salleurl.lscatalunya.R;
 import edu.salleurl.lscatalunya.activities.CenterActivity;
+import edu.salleurl.lscatalunya.activities.CenterSelectionActivity;
 import edu.salleurl.lscatalunya.holders.CenterHolder;
 import edu.salleurl.lscatalunya.listeners.CenterSelectionListener;
 import edu.salleurl.lscatalunya.model.Center;
 
 public class CenterSelectionAdapter extends RecyclerView.Adapter<CenterHolder> implements Parcelable {
 
-    private Activity activity;
+    private CenterSelectionActivity activity;
     private ArrayList<Center> centers;
     private CenterSelectionListener listener;
 
-    public CenterSelectionAdapter(Activity activity, ArrayList<Center> centers) {
+    public CenterSelectionAdapter(CenterSelectionActivity activity, ArrayList<Center> centers) {
         this.activity = activity;
         this.centers = centers;
         listener = new CenterSelectionListener(this);
@@ -73,11 +74,6 @@ public class CenterSelectionAdapter extends RecyclerView.Adapter<CenterHolder> i
         return centers.size();
     }
 
-    public void setCenters(ArrayList<Center> centers) {
-        this.centers = centers;
-        notifyDataSetChanged();
-    }
-
     @Override
     public int describeContents() {
         return 0;
@@ -89,11 +85,15 @@ public class CenterSelectionAdapter extends RecyclerView.Adapter<CenterHolder> i
     }
 
     public void onClick(View view) {
-        Intent intent = new Intent(activity, CenterActivity.class);
-        RecyclerView rView = (RecyclerView) view.getParent();
-        intent.putExtra(CenterActivity.CENTERS_EXTRA, centers);
-        intent.putExtra(CenterActivity.CENTER_EXTRA, centers.get(rView.getChildLayoutPosition(view)));
-        activity.startActivity(intent);
+        if(!activity.isLoading()) {
+            Intent intent = new Intent(activity, CenterActivity.class);
+            RecyclerView rView = (RecyclerView) view.getParent();
+            intent.putExtra(CenterActivity.CENTER_EXTRA, centers.get(rView.getChildLayoutPosition(view)));
+            activity.startActivity(intent);
+        } else {
+            Toast.makeText(activity, activity.getString(R.string.wait_refresh), Toast.LENGTH_SHORT).
+                    show();
+        }
     }
 
 }
