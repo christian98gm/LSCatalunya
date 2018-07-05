@@ -10,12 +10,14 @@ import android.location.Geocoder;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.BottomSheetBehavior;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdate;
@@ -23,14 +25,18 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import edu.salleurl.lscatalunya.R;
 import edu.salleurl.lscatalunya.model.Center;
@@ -39,8 +45,12 @@ import edu.salleurl.lscatalunya.model.CenterManager;
 public class MapActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     public final static String ADDRESS_EXTRA = "addressExtra";
-    private final static String POSITION_KEY = "positionKey";
 
+    //Saved instance keys
+    private final static String POSITION_KEY = "positionKey";
+    private final static String CENTER_KEY = "centerKey";
+
+    //Permission id
     private final static int LOCATION_PERMISSION = 4718;
 
     //Map utils
@@ -53,9 +63,15 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     //Data
     private GoogleMap map;
     private CameraPosition cameraPosition;
+    private BottomSheetBehavior sheetBehavior;
+    private Map<String, Center> hashMap;
+    private Center sheetCenter;
+    private boolean enabledSpinner;
 
     //Views
     private Spinner centerTypes;
+    private TextView mapSchoolName;
+    private TextView mapSchoolAddress;
 
     //Center manager
     private CenterManager centerManager;
@@ -66,10 +82,29 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
 
+        //Get sheet behavior
+        sheetBehavior = BottomSheetBehavior.from(findViewById(R.id.mapSheet));
+        sheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+            @Override
+            public void onStateChanged(@NonNull View bottomSheet, int newState) {
+                if(newState == BottomSheetBehavior.STATE_HIDDEN) {
+                    sheetCenter = null;
+                }
+            }
+            @Override
+            public void onSlide(@NonNull View bottomSheet, float slideOffset) {}
+        });
+        sheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+
+        //Get sheet views
+        mapSchoolName = findViewById(R.id.mapSchoolName);
+        mapSchoolAddress = findViewById(R.id.mapSchoolAddress);
+
         //Get data
         centerManager = CenterManager.getInstance();
         if(savedInstanceState != null) {
             cameraPosition = savedInstanceState.getParcelable(POSITION_KEY);
+            sheetCenter = savedInstanceState.getParcelable(CENTER_KEY);
         } else {
 
             Intent intent = getIntent();
@@ -93,6 +128,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         }
 
         //Set center type list and link listener
+        enabledSpinner = false;
         ArrayAdapter<CharSequence> centerTypesAdapter = ArrayAdapter.createFromResource(this,
                 R.array.center_types, android.R.layout.simple_spinner_item);
         centerTypesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -100,7 +136,11 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         centerTypes.setAdapter(centerTypesAdapter);
         centerTypes.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
-                updateMapMarkers();
+                if(enabledSpinner) {
+                    updateMapMarkers();
+                } else {
+                    enabledSpinner = true;
+                }
             }
             public void onNothingSelected(AdapterView<?> adapterView) {}
         });
@@ -115,21 +155,22 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     }
 
     private void updateMapMarkers() {
-        ArrayList<Center> centers = new ArrayList<>();
-        if(String.valueOf(centerTypes.getSelectedItem()).equals(getString(R.string.all))) {
-            centers = centerManager.getCenters();
-        } else if(String.valueOf(centerTypes.getSelectedItem()).equals(getString(R.string.schools))) {
-            centers = centerManager.getSchools();
-        } else if(String.valueOf(centerTypes.getSelectedItem()).equals(getString(R.string.others))) {
-            centers = centerManager.getOthers();
+        if(map != null) {
+            ArrayList<Center> centers = new ArrayList<>();
+            if (String.valueOf(centerTypes.getSelectedItem()).equals(getString(R.string.all))) {
+                centers = centerManager.getCenters();
+            } else if (String.valueOf(centerTypes.getSelectedItem()).equals(getString(R.string.schools))) {
+                centers = centerManager.getSchools();
+            } else if (String.valueOf(centerTypes.getSelectedItem()).equals(getString(R.string.others))) {
+                centers = centerManager.getOthers();
+            }
+            setMarkers(centers);
         }
-        setMarkers(centers);
     }
 
     private void setMarkers(ArrayList<Center> centers) {
-        //Custom marker
-        //MarkerOptions markerOptions = new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.drawable.icon_location));
         map.clear();
+        hashMap = new HashMap<>();
         boolean error = false;
         for(Center c : centers) {
             try {
@@ -139,7 +180,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 MarkerOptions marker = new MarkerOptions();
                 marker.position(new LatLng(addresses.get(0).getLatitude(),
                         addresses.get(0).getLongitude()));
-                map.addMarker(marker);
+                marker.icon(BitmapDescriptorFactory.defaultMarker(getMarkerColor(c)));
+                Marker mapMarker = map.addMarker(marker);
+                hashMap.put(mapMarker.getId(), c);
             } catch(IOException e) {
                 error = true;
             }
@@ -147,6 +190,24 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         if(error) {
             Toast.makeText(this, getString(R.string.centers_not_found), Toast.LENGTH_SHORT).
                     show();
+        }
+    }
+
+    private float getMarkerColor(Center center) {
+        if(center.hasUniversity()) {
+            return BitmapDescriptorFactory.HUE_CYAN;
+        } else if(center.hasVocationalTraining()) {
+            return BitmapDescriptorFactory.HUE_GREEN;
+        } else if(center.hasHighSchool()) {
+            return BitmapDescriptorFactory.HUE_RED;
+        } else if(center.hasSecondary()) {
+            return BitmapDescriptorFactory.HUE_ORANGE;
+        } else if(center.hasPrimary()) {
+            return BitmapDescriptorFactory.HUE_YELLOW;
+        } else if(center.hasChildren()) {
+            return BitmapDescriptorFactory.HUE_VIOLET;
+        } else {
+            return BitmapDescriptorFactory.HUE_AZURE;
         }
     }
 
@@ -163,9 +224,26 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(cameraPosition.target,
                 cameraPosition.zoom);
         map.animateCamera(cameraUpdate);
+        map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                sheetCenter = hashMap.get(marker.getId());
+                mapSchoolName.setText(sheetCenter.getName());
+                mapSchoolAddress.setText(sheetCenter.getAddress());
+                sheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                return false;
+            }
+        });
 
         //Show markers
         updateMapMarkers();
+
+        //Show sheet if there is content
+        if(sheetCenter != null) {
+            mapSchoolName.setText(sheetCenter.getName());
+            mapSchoolAddress.setText(sheetCenter.getAddress());
+            sheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+        }
 
         //Check permissions to self-position
         if(ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
@@ -179,7 +257,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             return;
         }
 
-        map.setMyLocationEnabled(true);
+        googleMap.setMyLocationEnabled(true);
 
     }
 
@@ -198,6 +276,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         outState.putParcelable(POSITION_KEY, map.getCameraPosition());
+        outState.putParcelable(CENTER_KEY, sheetCenter);
         super.onSaveInstanceState(outState);
     }
 

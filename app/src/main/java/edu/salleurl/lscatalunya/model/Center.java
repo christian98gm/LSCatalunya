@@ -144,7 +144,8 @@ public class Center implements Parcelable {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, address, hasChildren, hasPrimary, hasSecondary, hasHighSchool, hasVocationalTraining, hasUniversity, description);
+        return Objects.hash(id, name, address, hasChildren, hasPrimary, hasSecondary, hasHighSchool,
+                hasVocationalTraining, hasUniversity, description);
     }
 
     @Override

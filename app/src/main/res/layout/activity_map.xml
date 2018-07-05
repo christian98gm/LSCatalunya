@@ -1,63 +1,126 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <android.support.design.widget.AppBarLayout
-        android:id="@+id/mapAppBar"
-        android:layout_height="wrap_content"
-        android:layout_width="match_parent">
-
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/mapToolbar"
-            android:layout_height="?attr/actionBarSize"
-            android:layout_width="match_parent">
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <Spinner
-                    android:id="@+id/mapCenterTypes"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentStart="true"
-                    android:layout_centerVertical="true"/>
-
-                <ImageButton
-                    android:id="@+id/mapLogin"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_toStartOf="@id/mapCenters"
-                    android:backgroundTint="@android:color/transparent"
-                    android:contentDescription="@string/login"
-                    android:src="@drawable/ic_menu_login"
-                    android:layout_centerVertical="true"/>
-
-                <ImageButton
-                    android:id="@+id/mapCenters"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:backgroundTint="@android:color/transparent"
-                    android:contentDescription="@string/show_centers_list"
-                    android:src="@drawable/ic_menu_list"
-                    android:layout_centerVertical="true"
-                    android:onClick="showCentersList"/>
-
-            </RelativeLayout>
-
-        </android.support.v7.widget.Toolbar>
-
-    </android.support.design.widget.AppBarLayout>
-
-    <FrameLayout
-        android:id="@+id/mapFragment"
-        tools:context="com.google.android.gms.maps.SupportMapFragment"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/mapAppBar"/>
+        android:layout_height="match_parent">
 
-</RelativeLayout>
+        <android.support.design.widget.AppBarLayout
+            android:id="@+id/mapAppBar"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true">
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/mapToolbar"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_width="match_parent">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <Spinner
+                        android:id="@+id/mapCenterTypes"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_centerVertical="true"/>
+
+                    <ImageButton
+                        android:id="@+id/mapLogin"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toStartOf="@id/mapCenters"
+                        android:backgroundTint="@android:color/transparent"
+                        android:contentDescription="@string/login"
+                        android:src="@drawable/ic_menu_login"
+                        android:layout_centerVertical="true"/>
+
+                    <ImageButton
+                        android:id="@+id/mapCenters"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:backgroundTint="@android:color/transparent"
+                        android:contentDescription="@string/show_centers_list"
+                        android:src="@drawable/ic_menu_list"
+                        android:layout_centerVertical="true"
+                        android:onClick="showCentersList"/>
+
+                </RelativeLayout>
+
+            </android.support.v7.widget.Toolbar>
+
+        </android.support.design.widget.AppBarLayout>
+
+        <FrameLayout
+            android:id="@+id/mapFragment"
+            tools:context="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_below="@id/mapAppBar"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/mapSheet"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:behavior_hideable="true"
+        app:layout_behavior="android.support.design.widget.BottomSheetBehavior"
+        android:padding="16dp"
+        android:background="@android:color/white">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_alignParentStart="true"
+            android:layout_toStartOf="@id/mapSchoolPhoto"
+            android:layout_centerVertical="true">
+
+            <TextView
+                android:id="@+id/mapSchoolName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:singleLine="true"/>
+
+            <TextView
+                android:id="@+id/mapSchoolAddress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto"
+                android:textSize="14sp"
+                android:textStyle="normal"
+                android:singleLine="true"
+                android:layout_marginTop="4dp"/>
+
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/mapSchoolPhoto"
+            android:layout_width="100dp"
+            android:layout_height="56dp"
+            android:layout_marginStart="20dp"
+            android:contentDescription="@string/school_photo"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_item_classroom"
+            android:layout_alignParentEnd="true"/>
+
+    </RelativeLayout>
+
+</android.support.design.widget.CoordinatorLayout>
