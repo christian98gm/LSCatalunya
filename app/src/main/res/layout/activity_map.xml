@@ -28,7 +28,7 @@
                     android:layout_height="match_parent">
 
                     <Spinner
-                        android:id="@+id/mapCenterTypes"
+                        android:id="@+id/mapTypes"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentStart="true"
@@ -38,14 +38,14 @@
                         android:id="@+id/mapLogin"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_toStartOf="@id/mapCenters"
+                        android:layout_toStartOf="@id/mapCenterList"
                         android:backgroundTint="@android:color/transparent"
                         android:contentDescription="@string/login"
                         android:src="@drawable/ic_menu_login"
                         android:layout_centerVertical="true"/>
 
                     <ImageButton
-                        android:id="@+id/mapCenters"
+                        android:id="@+id/mapCenterList"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
@@ -62,7 +62,7 @@
         </android.support.design.widget.AppBarLayout>
 
         <FrameLayout
-            android:id="@+id/mapFragment"
+            android:id="@+id/mapFrame"
             tools:context="com.google.android.gms.maps.SupportMapFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -74,7 +74,7 @@
     </RelativeLayout>
 
     <RelativeLayout
-        android:id="@+id/mapSheet"
+        android:id="@+id/mapBottomSheet"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:behavior_hideable="true"
@@ -87,11 +87,11 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:layout_alignParentStart="true"
-            android:layout_toStartOf="@id/mapSchoolPhoto"
+            android:layout_toStartOf="@id/mapPhoto"
             android:layout_centerVertical="true">
 
             <TextView
-                android:id="@+id/mapSchoolName"
+                android:id="@+id/mapName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/roboto"
@@ -100,7 +100,7 @@
                 android:singleLine="true"/>
 
             <TextView
-                android:id="@+id/mapSchoolAddress"
+                android:id="@+id/mapAddress"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/roboto"
@@ -112,7 +112,7 @@
         </LinearLayout>
 
         <ImageView
-            android:id="@+id/mapSchoolPhoto"
+            android:id="@+id/mapPhoto"
             android:layout_width="100dp"
             android:layout_height="56dp"
             android:layout_marginStart="20dp"

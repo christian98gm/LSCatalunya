@@ -11,7 +11,7 @@
         android:orientation="vertical">
 
         <ImageView
-            android:id="@+id/centerSchoolImage"
+            android:id="@+id/centerPhoto"
             android:layout_width="match_parent"
             android:layout_height="194dp"
             android:scaleType="centerCrop"
@@ -30,7 +30,7 @@
                 android:paddingBottom="20dp">
 
                 <TextView
-                    android:id="@+id/centerSchoolName"
+                    android:id="@+id/centerName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/roboto"
@@ -39,7 +39,7 @@
                     android:layout_marginTop="20dp"/>
 
                 <TextView
-                    android:id="@+id/centerSchoolAddress"
+                    android:id="@+id/centerAddress"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/roboto"
@@ -169,12 +169,12 @@
     </LinearLayout>
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/centerMapButton"
+        android:id="@+id/centerMap"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
         android:src="@drawable/ic_menu_map"
-        app:layout_anchor="@id/centerSchoolImage"
+        app:layout_anchor="@id/centerPhoto"
         app:layout_anchorGravity="bottom|right|end"
         android:onClick="showMap"/>
 

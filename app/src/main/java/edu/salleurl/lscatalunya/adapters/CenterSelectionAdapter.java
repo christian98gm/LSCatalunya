@@ -14,21 +14,21 @@ import java.util.ArrayList;
 
 import edu.salleurl.lscatalunya.R;
 import edu.salleurl.lscatalunya.activities.CenterActivity;
-import edu.salleurl.lscatalunya.activities.CenterSelectionActivity;
+import edu.salleurl.lscatalunya.activities.CenterListActivity;
 import edu.salleurl.lscatalunya.holders.CenterHolder;
-import edu.salleurl.lscatalunya.listeners.CenterSelectionListener;
+import edu.salleurl.lscatalunya.listeners.ItemListener;
 import edu.salleurl.lscatalunya.model.Center;
 
 public class CenterSelectionAdapter extends RecyclerView.Adapter<CenterHolder> implements Parcelable {
 
-    private CenterSelectionActivity activity;
+    private CenterListActivity activity;
     private ArrayList<Center> centers;
-    private CenterSelectionListener listener;
+    private ItemListener listener;
 
-    public CenterSelectionAdapter(CenterSelectionActivity activity, ArrayList<Center> centers) {
+    public CenterSelectionAdapter(CenterListActivity activity, ArrayList<Center> centers) {
         this.activity = activity;
         this.centers = centers;
-        listener = new CenterSelectionListener(this);
+        listener = new ItemListener(this);
     }
 
     protected CenterSelectionAdapter(Parcel in) {
@@ -51,7 +51,7 @@ public class CenterSelectionAdapter extends RecyclerView.Adapter<CenterHolder> i
     public CenterHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         //Create layout and link listener
         View view = LayoutInflater.from(parent.getContext()).
-                inflate(R.layout.activity_center_selection_list_item, parent, false);
+                inflate(R.layout.activity_center_list_center, parent, false);
         view.setOnClickListener(listener);
         return new CenterHolder(view);
     }
@@ -94,6 +94,10 @@ public class CenterSelectionAdapter extends RecyclerView.Adapter<CenterHolder> i
             Toast.makeText(activity, activity.getString(R.string.wait_refresh), Toast.LENGTH_SHORT).
                     show();
         }
+    }
+
+    public CenterListActivity getActivity() {
+        return activity;
     }
 
 }

@@ -4,11 +4,11 @@ import android.view.View;
 
 import edu.salleurl.lscatalunya.adapters.CenterSelectionAdapter;
 
-public class CenterSelectionListener implements View.OnClickListener {
+public class ItemListener implements View.OnClickListener {
 
     private CenterSelectionAdapter adapter;
 
-    public CenterSelectionListener(CenterSelectionAdapter adapter) {
+    public ItemListener(CenterSelectionAdapter adapter) {
         this.adapter = adapter;
     }
 

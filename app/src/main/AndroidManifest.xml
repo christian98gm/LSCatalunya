@@ -14,14 +14,15 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".activities.CenterSelectionActivity">
+        <activity android:name=".activities.CenterListActivity"/>
+        <activity android:name=".activities.CenterActivity"/>
+        <activity android:name=".activities.MapActivity"/>
+        <activity android:name=".test.TestActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".activities.CenterActivity"/>
-        <activity android:name=".activities.MapActivity"/>
 
         <meta-data
             android:name="preloaded_fonts"

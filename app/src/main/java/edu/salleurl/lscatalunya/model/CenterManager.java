@@ -34,22 +34,32 @@ public class CenterManager {
     public void addCenter(Center center) {
 
         //Add center to global data
-        centers.add(center);
-        if(center.hasChildren() || center.hasPrimary() || center.hasSecondary()) {
-            schools.add(center);
-        }
-        if(center.hasHighSchool() || center.hasVocationalTraining() || center.hasUniversity()) {
-            others.add(center);
-        }
-
-        //Add center to province data
-        if(province != null && center.getAddress().contains(province)) {
-            centersIn.add(center);
+        if(!centers.contains(center)) {
+            centers.add(center);
             if(center.hasChildren() || center.hasPrimary() || center.hasSecondary()) {
-                schoolsIn.add(center);
+                schools.add(center);
             }
             if(center.hasHighSchool() || center.hasVocationalTraining() || center.hasUniversity()) {
-                othersIn.add(center);
+                others.add(center);
+            }
+
+            //Add center to province data
+            if(province != null && center.getAddress().contains(province)) {
+                centersIn.add(center);
+                if (center.hasChildren() || center.hasPrimary() || center.hasSecondary()) {
+                    schoolsIn.add(center);
+                }
+                if (center.hasHighSchool() || center.hasVocationalTraining() || center.hasUniversity()) {
+                    othersIn.add(center);
+                }
+            } else if(province == null) {
+                centersIn.add(center);
+                if (center.hasChildren() || center.hasPrimary() || center.hasSecondary()) {
+                    schoolsIn.add(center);
+                }
+                if (center.hasHighSchool() || center.hasVocationalTraining() || center.hasUniversity()) {
+                    othersIn.add(center);
+                }
             }
         }
 
@@ -61,37 +71,28 @@ public class CenterManager {
 
         //Centers
         centersIn.clear();
-        for(int i = 0; i < centers.size(); i++) {
-            if(centers.get(i).getAddress().contains(province)) {
+        for (int i = 0; i < centers.size(); i++) {
+            if (centers.get(i).getAddress().contains(province)) {
                 centersIn.add(centers.get(i));
             }
         }
 
         //Schools
         schoolsIn.clear();
-        for(int i = 0; i < schools.size(); i++) {
-            if(schools.get(i).getAddress().contains(province)) {
+        for (int i = 0; i < schools.size(); i++) {
+            if (schools.get(i).getAddress().contains(province)) {
                 schoolsIn.add(schools.get(i));
             }
         }
 
         //Others
         othersIn.clear();
-        for(int i = 0; i < others.size(); i++) {
-            if(others.get(i).getAddress().contains(province)) {
+        for (int i = 0; i < others.size(); i++) {
+            if (others.get(i).getAddress().contains(province)) {
                 othersIn.add(others.get(i));
             }
         }
 
-    }
-
-    public void clear() {
-        centers.clear();
-        centersIn.clear();
-        schools.clear();
-        schoolsIn.clear();
-        others.clear();
-        othersIn.clear();
     }
 
     public ArrayList<Center> getCenters() {

@@ -20,14 +20,14 @@ public class CenterHolder extends RecyclerView.ViewHolder {
 
     public CenterHolder(View itemView) {
         super(itemView);
-        schoolName = itemView.findViewById(R.id.centerSelectionSchoolName);
-        schoolAddress = itemView.findViewById(R.id.centerSelectionSchoolAddress);
-        children = itemView.findViewById(R.id.centerSelectionChildren);
-        primary = itemView.findViewById(R.id.centerSelectionPrimary);
-        secondary = itemView.findViewById(R.id.centerSelectionSecondary);
-        highSchool = itemView.findViewById(R.id.centerSelectionHighSchool);
-        vocationalTraining = itemView.findViewById(R.id.centerSelectionVocationalTraining);
-        university = itemView.findViewById(R.id.centerSelectionUniversity);
+        schoolName = itemView.findViewById(R.id.centerListName);
+        schoolAddress = itemView.findViewById(R.id.centerListAddress);
+        children = itemView.findViewById(R.id.centerListChildren);
+        primary = itemView.findViewById(R.id.centerListPrimary);
+        secondary = itemView.findViewById(R.id.centerListSecondary);
+        highSchool = itemView.findViewById(R.id.centerListHighSchool);
+        vocationalTraining = itemView.findViewById(R.id.centerListVocationalTraining);
+        university = itemView.findViewById(R.id.centerListUniversity);
     }
 
     public void setSchoolName(String name) {

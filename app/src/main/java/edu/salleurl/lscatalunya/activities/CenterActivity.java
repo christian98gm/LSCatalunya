@@ -31,10 +31,10 @@ public class CenterActivity extends AppCompatActivity {
         }
 
         //Set school name and address
-        TextView schoolName = findViewById(R.id.centerSchoolName);
+        TextView schoolName = findViewById(R.id.centerName);
         schoolName.setText(center.getName());
 
-        TextView schoolAddress = findViewById(R.id.centerSchoolAddress);
+        TextView schoolAddress = findViewById(R.id.centerAddress);
         schoolAddress.setText(center.getAddress());
 
         //Set tags visibility
@@ -64,7 +64,7 @@ public class CenterActivity extends AppCompatActivity {
 
     public void showMap(View view) {
         Intent intent = new Intent(this, MapActivity.class);
-        intent.putExtra(MapActivity.ADDRESS_EXTRA, center.getAddress());
+        intent.putExtra(MapActivity.CENTER_EXTRA, center);
         startActivity(intent);
         finish();
     }

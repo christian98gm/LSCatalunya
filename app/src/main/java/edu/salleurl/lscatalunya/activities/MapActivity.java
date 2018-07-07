@@ -5,8 +5,6 @@ import android.annotation.SuppressLint;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.location.Address;
-import android.location.Geocoder;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -31,11 +29,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 import edu.salleurl.lscatalunya.R;
@@ -44,7 +39,7 @@ import edu.salleurl.lscatalunya.model.CenterManager;
 
 public class MapActivity extends AppCompatActivity implements OnMapReadyCallback {
 
-    public final static String ADDRESS_EXTRA = "addressExtra";
+    public final static String CENTER_EXTRA = "addressExtra";
 
     //Saved instance keys
     private final static String POSITION_KEY = "positionKey";
@@ -54,7 +49,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private final static int LOCATION_PERMISSION = 4718;
 
     //Map utils
-    private final static String CATALONIA_LOCALE = "ca_ES";
     private final static double CATALONIA_LAT = 41.81;
     private final static double CATALONIA_LON = 1.47;
     private final static float CATALONIA_ZOOM = 6.8f;
@@ -83,7 +77,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         setContentView(R.layout.activity_map);
 
         //Get sheet behavior
-        sheetBehavior = BottomSheetBehavior.from(findViewById(R.id.mapSheet));
+        sheetBehavior = BottomSheetBehavior.from(findViewById(R.id.mapBottomSheet));
         sheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
             @Override
             public void onStateChanged(@NonNull View bottomSheet, int newState) {
@@ -97,8 +91,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         sheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
 
         //Get sheet views
-        mapSchoolName = findViewById(R.id.mapSchoolName);
-        mapSchoolAddress = findViewById(R.id.mapSchoolAddress);
+        mapSchoolName = findViewById(R.id.mapName);
+        mapSchoolAddress = findViewById(R.id.mapAddress);
 
         //Get data
         centerManager = CenterManager.getInstance();
@@ -111,15 +105,12 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             cameraPosition = new CameraPosition.Builder().target(new LatLng(CATALONIA_LAT,
                     CATALONIA_LON)).zoom(CATALONIA_ZOOM).build();
 
-            if(intent.hasExtra(ADDRESS_EXTRA)) {
-                String address = intent.getStringExtra(ADDRESS_EXTRA);
-                try {
-                    Geocoder geocoder = new Geocoder(this, new Locale(CATALONIA_LOCALE));
-                    List<Address> addresses = geocoder.getFromLocationName(address, 1);
-                    cameraPosition = new CameraPosition.Builder().
-                            target(new LatLng(addresses.get(0).getLatitude(), addresses.get(0).getLongitude())).
+            if(intent.hasExtra(CENTER_EXTRA)) {
+                Center center = intent.getParcelableExtra(CENTER_EXTRA);
+                if(center.getLocation() != null) {
+                    cameraPosition = new CameraPosition.Builder().target(center.getLocation()).
                             zoom(ADDRESS_ZOOM).build();
-                } catch(IOException e) {
+                } else {
                     Toast.makeText(this, getString(R.string.address_not_found), Toast.LENGTH_SHORT).
                             show();
                 }
@@ -132,7 +123,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         ArrayAdapter<CharSequence> centerTypesAdapter = ArrayAdapter.createFromResource(this,
                 R.array.center_types, android.R.layout.simple_spinner_item);
         centerTypesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        centerTypes = findViewById(R.id.mapCenterTypes);
+        centerTypes = findViewById(R.id.mapTypes);
         centerTypes.setAdapter(centerTypesAdapter);
         centerTypes.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
@@ -148,7 +139,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         //Link map fragment
         MapFragment mapFragment = MapFragment.newInstance();
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-        fragmentTransaction.add(R.id.mapFragment, mapFragment);
+        fragmentTransaction.add(R.id.mapFrame, mapFragment);
         fragmentTransaction.commit();
         mapFragment.getMapAsync(this);
 
@@ -173,17 +164,14 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         hashMap = new HashMap<>();
         boolean error = false;
         for(Center c : centers) {
-            try {
+            if(c.getLocation() != null) {
                 //Get location and add marker to map if possible
-                Geocoder geocoder = new Geocoder(this, new Locale(CATALONIA_LOCALE));
-                List<Address> addresses = geocoder.getFromLocationName(c.getAddress(), 1);
                 MarkerOptions marker = new MarkerOptions();
-                marker.position(new LatLng(addresses.get(0).getLatitude(),
-                        addresses.get(0).getLongitude()));
+                marker.position(c.getLocation());
                 marker.icon(BitmapDescriptorFactory.defaultMarker(getMarkerColor(c)));
                 Marker mapMarker = map.addMarker(marker);
                 hashMap.put(mapMarker.getId(), c);
-            } catch(IOException e) {
+            } else {
                 error = true;
             }
         }

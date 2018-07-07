@@ -28,6 +28,8 @@
     <string name="address_not_found">Could not load center position</string>
     <string name="centers_not_found">Could not load some center positions</string>
     <string name="wait_refresh">Wait until centers are refreshed</string>
+    <string name="load_complete">Centers load was successful!</string>
+    <string name="load_incomplete">Centers load was not successful!</string>
     <string-array name="provinces">
         <item>@string/barcelona</item>
         <item>@string/girona</item>

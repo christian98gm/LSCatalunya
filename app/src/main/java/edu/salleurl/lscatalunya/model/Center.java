@@ -3,6 +3,8 @@ package edu.salleurl.lscatalunya.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.util.Objects;
 
 public class Center implements Parcelable {
@@ -17,6 +19,7 @@ public class Center implements Parcelable {
     private boolean hasVocationalTraining;
     private boolean hasUniversity;
     private String description;
+    private LatLng location;
 
     public Center() {}
 
@@ -31,6 +34,27 @@ public class Center implements Parcelable {
         hasVocationalTraining = in.readByte() != 0;
         hasUniversity = in.readByte() != 0;
         description = in.readString();
+        location = in.readParcelable(LatLng.class.getClassLoader());
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(id);
+        dest.writeString(name);
+        dest.writeString(address);
+        dest.writeByte((byte) (hasChildren ? 1 : 0));
+        dest.writeByte((byte) (hasPrimary ? 1 : 0));
+        dest.writeByte((byte) (hasSecondary ? 1 : 0));
+        dest.writeByte((byte) (hasHighSchool ? 1 : 0));
+        dest.writeByte((byte) (hasVocationalTraining ? 1 : 0));
+        dest.writeByte((byte) (hasUniversity ? 1 : 0));
+        dest.writeString(description);
+        dest.writeParcelable(location, flags);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
     public static final Creator<Center> CREATOR = new Creator<Center>() {
@@ -125,6 +149,14 @@ public class Center implements Parcelable {
         this.description = description;
     }
 
+    public LatLng getLocation() {
+        return location;
+    }
+
+    public void setLocation(LatLng location) {
+        this.location = location;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -145,26 +177,7 @@ public class Center implements Parcelable {
     @Override
     public int hashCode() {
         return Objects.hash(id, name, address, hasChildren, hasPrimary, hasSecondary, hasHighSchool,
-                hasVocationalTraining, hasUniversity, description);
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeLong(id);
-        parcel.writeString(name);
-        parcel.writeString(address);
-        parcel.writeByte((byte) (hasChildren ? 1 : 0));
-        parcel.writeByte((byte) (hasPrimary ? 1 : 0));
-        parcel.writeByte((byte) (hasSecondary ? 1 : 0));
-        parcel.writeByte((byte) (hasHighSchool ? 1 : 0));
-        parcel.writeByte((byte) (hasVocationalTraining ? 1 : 0));
-        parcel.writeByte((byte) (hasUniversity ? 1 : 0));
-        parcel.writeString(description);
+                hasVocationalTraining, hasUniversity, description, location);
     }
 
 }

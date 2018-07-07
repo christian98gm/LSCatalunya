@@ -1,6 +1,8 @@
 package edu.salleurl.lscatalunya.repositories.impl;
 
 import android.content.Context;
+import android.location.Address;
+import android.location.Geocoder;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -8,9 +10,14 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.gms.maps.model.LatLng;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.List;
+import java.util.Locale;
 
+import edu.salleurl.lscatalunya.model.Center;
 import edu.salleurl.lscatalunya.repositories.AsyncCenterRepo;
 import edu.salleurl.lscatalunya.repositories.json.JsonException;
 import edu.salleurl.lscatalunya.repositories.json.JsonManager;
@@ -20,6 +27,9 @@ public class CenterWebService implements AsyncCenterRepo {
     //Custom codes
     public final static int OK = -1;
     public final static int HTTP_ERROR = -2;
+
+    //Address help
+    private final static String CATALONIA_LOCALE = "ca_ES";
 
     //Url
     private final static String URL = "https://testapi-pprog2.azurewebsites.net/api/schools.php";
@@ -36,39 +46,91 @@ public class CenterWebService implements AsyncCenterRepo {
     private final static String TYPE_PARAM = "type";
 
     //Attributes
-    private final RequestQueue requestQueue;
-    private final Callback callback;
+    private RequestQueue requestQueue;
+    private Callback callback;
+    private Context context;
 
-    public CenterWebService(Context context, AsyncCenterRepo.Callback callback) {
+    private boolean isPaused;
+    private boolean isWorking;
+    private boolean isFirstTime;
+
+    //Instance
+    private static CenterWebService instance;
+
+    private CenterWebService(Context context, AsyncCenterRepo.Callback callback) {
+        isFirstTime = true;
         requestQueue = Volley.newRequestQueue(context);
+        this.context = context;
         this.callback = callback;
+    }
+
+    public static CenterWebService getInstance(Context context, AsyncCenterRepo.Callback callback) {
+        if(instance == null) {
+            instance = new CenterWebService(context, callback);
+        }
+        instance.callback = callback;
+        return instance;
     }
 
     @Override
     public void getCenters() {
-        String url = URL + '?' + METHOD_PARAM + '=' + GET_SCHOOLS_METHOD;
-        StringRequest request = new StringRequest(Request.Method.GET, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        try {
-                            JsonManager jsonManager = new JsonManager(fixEncoding(response));
-                            int totalCenters = jsonManager.getTotalCenters();
-                            for(int i = 0; i < jsonManager.getTotalCenters(); i++) {
-                                callback.onResponse(jsonManager.getCenter(i), OK,
-                                        i == (totalCenters - 1));
+        if(!isWorking) {
+            isWorking = true;
+            isPaused = false;
+            String url = URL + '?' + METHOD_PARAM + '=' + GET_SCHOOLS_METHOD;
+            StringRequest request = new StringRequest(Request.Method.GET, url,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            try {
+                                JsonManager jsonManager = new JsonManager(fixEncoding(response));
+                                int totalCenters = jsonManager.getTotalCenters();
+                                for (int i = 0; i < jsonManager.getTotalCenters(); i++) {
+                                    Center center = jsonManager.getCenter(i);
+                                    center.setLocation(getLocationFromAddress(center.getAddress()));
+                                    if (i == (totalCenters - 1)) {
+                                        isFirstTime = false;
+                                        isWorking = false;
+                                    }
+                                    callback.onResponse(center, OK, i == (totalCenters - 1));
+                                }
+                            } catch (JsonException e) {
+                                callback.onResponse(null, e.getErrorCode(), true);
+                                isWorking = false;
                             }
-                        } catch(JsonException e) {
-                            callback.onResponse(null, e.getErrorCode(), true);
                         }
-                    }
-                }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        callback.onResponse(null, HTTP_ERROR, true);
-                    }
-                });
-        requestQueue.add(request);
+                    }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    isFirstTime = false;
+                    isWorking = false;
+                    callback.onResponse(null, HTTP_ERROR, true);
+                }
+            });
+            requestQueue.add(request);
+        }
+    }
+
+    public void stopRequest() {
+        isPaused = true;
+        requestQueue.stop();
+    }
+
+    public boolean isPaused() {
+        return isPaused;
+    }
+
+    public boolean isWorking() {
+        return isWorking;
+    }
+
+    public void startRequest() {
+        requestQueue.start();
+        isPaused = false;
+    }
+
+    public boolean isFirstTime() {
+        return isFirstTime;
     }
 
     private String fixEncoding(String s) {
@@ -81,6 +143,18 @@ public class CenterWebService implements AsyncCenterRepo {
             return null;
         }
         return s;
+    }
+
+    private LatLng getLocationFromAddress(String address) {
+        LatLng location = null;
+        try {
+            Geocoder geocoder = new Geocoder(context, new Locale(CATALONIA_LOCALE));
+            List<Address> addresses = geocoder.getFromLocationName(address, 1);
+            location = new LatLng(addresses.get(0).getLatitude(), addresses.get(0).getLongitude());
+        } catch(IOException e) {
+            //Address not found
+        }
+        return location;
     }
 
 }
