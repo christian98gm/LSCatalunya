@@ -1,4 +1,4 @@
-package edu.salleurl.lscatalunya.test;
+package edu.salleurl.lscatalunya.adapters;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -10,13 +10,14 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import java.util.ArrayList;
 
 import edu.salleurl.lscatalunya.R;
+import edu.salleurl.lscatalunya.fragment.RecyclerFragment;
 import edu.salleurl.lscatalunya.model.Center;
 
 public class PagerAdapter extends FragmentStatePagerAdapter {
 
     private final static int TOTAL_PAGES = 3;
 
-    private ArrayList<TestFragment> testFragments;
+    private ArrayList<RecyclerFragment> recyclerFragments;
 
     private ArrayList<Center> centers;
     private ArrayList<Center> schools;
@@ -35,15 +36,15 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
     }
 
     private void createFragments() {
-        testFragments = new ArrayList<>(TOTAL_PAGES);
-        testFragments.add(TestFragment.newInstance(centers));
-        testFragments.add(TestFragment.newInstance(schools));
-        testFragments.add(TestFragment.newInstance(others));
+        recyclerFragments = new ArrayList<>(TOTAL_PAGES);
+        recyclerFragments.add(RecyclerFragment.newInstance(centers));
+        recyclerFragments.add(RecyclerFragment.newInstance(schools));
+        recyclerFragments.add(RecyclerFragment.newInstance(others));
     }
 
     @Override
     public Fragment getItem(int position) {
-        return testFragments.get(position);
+        return recyclerFragments.get(position);
     }
 
     @Override
@@ -73,13 +74,13 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
     public void notifyDataSetChanged() {
         super.notifyDataSetChanged();
         for(int i = 0; i < TOTAL_PAGES; i++) {
-            testFragments.get(i).notifyDataSetChanged();
+            recyclerFragments.get(i).notifyDataSetChanged();
         }
     }
 
     public void endRefreshing() {
         for(int i = 0; i < TOTAL_PAGES; i++) {
-            testFragments.get(i).endRefreshing();
+            recyclerFragments.get(i).endRefreshing();
         }
     }
 

@@ -1,4 +1,4 @@
-package edu.salleurl.lscatalunya.test;
+package edu.salleurl.lscatalunya.fragment;
 
 import edu.salleurl.lscatalunya.model.Center;
 

@@ -1,4 +1,4 @@
-package edu.salleurl.lscatalunya.test;
+package edu.salleurl.lscatalunya.adapters;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 
 import edu.salleurl.lscatalunya.R;
+import edu.salleurl.lscatalunya.fragment.RecyclerClickManager;
 import edu.salleurl.lscatalunya.holders.CenterHolder;
 import edu.salleurl.lscatalunya.model.Center;
 

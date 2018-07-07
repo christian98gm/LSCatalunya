@@ -1,4 +1,4 @@
-package edu.salleurl.lscatalunya.test;
+package edu.salleurl.lscatalunya.activities;
 
 import edu.salleurl.lscatalunya.model.Center;
 

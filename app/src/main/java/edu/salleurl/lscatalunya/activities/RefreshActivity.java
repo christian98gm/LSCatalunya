@@ -1,4 +1,4 @@
-package edu.salleurl.lscatalunya.test;
+package edu.salleurl.lscatalunya.activities;
 
 public interface RefreshActivity {
     boolean refreshActivity();

@@ -1,131 +1,125 @@
 package edu.salleurl.lscatalunya.activities;
 
 import android.content.Intent;
-import android.support.design.widget.TabLayout;
-import android.support.v4.view.ViewPager;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 
 import edu.salleurl.lscatalunya.R;
-import edu.salleurl.lscatalunya.adapters.TabAdapter;
-import edu.salleurl.lscatalunya.fragment.RecyclerViewFragment;
-import edu.salleurl.lscatalunya.listeners.RefreshListener;
 import edu.salleurl.lscatalunya.model.Center;
 import edu.salleurl.lscatalunya.model.CenterManager;
-import edu.salleurl.lscatalunya.repositories.AsyncCenterRepo;
 import edu.salleurl.lscatalunya.repositories.impl.CenterWebService;
 import edu.salleurl.lscatalunya.repositories.json.JsonException;
+import edu.salleurl.lscatalunya.adapters.PagerAdapter;
 
-public class CenterListActivity extends AppCompatActivity implements AsyncCenterRepo.Callback {
+public class CenterListActivity extends FragmentActivity implements CenterWebService.Callback, RefreshActivity,
+        ListActivity {
 
-    //Number of tabs
-    private final static int TOTAL_TABS = 3;
-
-    //Save instance key
-    private final static String FIRST_TIME_KEY = "firstTimeKey";
-
-    //Switch keys
-    private final static int START_WEB_SERVICE = 1;
-    private final static int STOP_WEB_SERVICE = 2;
-    private final static int UPDATE_CENTERS = 3;
-    private final static int STOP_REFRESH_STATE = 4;
-
-    //Data managers
-    private CenterManager centerManager;
-    private CenterWebService centerWebService;
+    //Instance keys
+    private final static String TIME_KEY = "loadKey";
 
     //Views
-    private Spinner provincesSpinner;
-
-    //Fragments
-    private RecyclerViewFragment[] fragments;
+    private Spinner spinner;
+    private ProgressBar progressBar;
 
     //Adapters
-    private TabAdapter tabAdapter;
-    private RefreshListener refreshListener;
+    private PagerAdapter pagerAdapter;
 
-    //Load states
-    private boolean firstTime;
+    //Center manager
+    private CenterManager centerManager;
+
+    //Web service
+    private CenterWebService centerWebService;
+
+    //Aux
+    private boolean isCreated;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_center_list);
 
-        //Get center manager and repository
+        //Get center manager
         centerManager = CenterManager.getInstance();
+
+        //Get center web service
         centerWebService = CenterWebService.getInstance(this, this);
 
         //Link views
-        provincesSpinner = findViewById(R.id.centerListProvinces);
-        SwipeRefreshLayout swipeRefreshLayout = findViewById(R.id.centerListRefresh);
-        ViewPager viewPager = findViewById(R.id.centerListViewPager);
+        spinner = findViewById(R.id.centerListProvinces);
+        progressBar = findViewById(R.id.centerListProgressBar);
         TabLayout tabLayout = findViewById(R.id.centerListTab);
+        ViewPager viewPager = findViewById(R.id.centerListViewPager);
 
-        //Link provinces adapter
-        ArrayAdapter<CharSequence> provincesAdapter = ArrayAdapter.createFromResource(this,
+        //Link view pager adapter
+        pagerAdapter = new PagerAdapter(getSupportFragmentManager(), centerManager.getCentersIn(),
+                centerManager.getSchoolsIn(), centerManager.getOthersIn(), this);
+        viewPager.setAdapter(pagerAdapter);
+
+        //Link view pager with tab layout
+        tabLayout.setupWithViewPager(viewPager);
+
+        //Link spinner adapter
+        ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(this,
                 R.array.provinces, android.R.layout.simple_spinner_item);
-        provincesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        provincesSpinner.setAdapter(provincesAdapter);
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(spinnerAdapter);
 
-        //Link provinces listener
-        provincesSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        //Link spinner listener
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
-                centerManager.setProvince(String.valueOf(provincesSpinner.getSelectedItem()));
-                updateFragmentsState(UPDATE_CENTERS);
+                centerManager.setProvince(String.valueOf(spinner.getSelectedItem()));
+                pagerAdapter.notifyDataSetChanged();
             }
             public void onNothingSelected(AdapterView<?> adapterView) {}
         });
 
-        //Link fragments
-        fragments = new RecyclerViewFragment[TOTAL_TABS];
-        fragments[0] = RecyclerViewFragment.newInstance(this, centerManager.getCentersIn());
-        fragments[1] = RecyclerViewFragment.newInstance(this, centerManager.getSchoolsIn());
-        fragments[2] = RecyclerViewFragment.newInstance(this, centerManager.getOthersIn());
-
-        //Link tab adapter
-        String[] tabs = getResources().getStringArray(R.array.center_types);
-        tabAdapter = new TabAdapter(getSupportFragmentManager(), fragments, tabs);
-        viewPager.setAdapter(tabAdapter);
-        tabLayout.setupWithViewPager(viewPager);
-
-        //Link swipe listener
-        refreshListener = new RefreshListener(this, swipeRefreshLayout);
-        swipeRefreshLayout.setOnRefreshListener(refreshListener);
-
-        //Get center data
         if(savedInstanceState == null) {
+            centerWebService.getCenters();
             Toast.makeText(this, getString(R.string.wait_loading), Toast.LENGTH_SHORT).show();
-            firstTime = true;
-            getCentersData();
-        } else {
-            firstTime = savedInstanceState.getBoolean(FIRST_TIME_KEY);
         }
 
     }
 
-    public void getCentersData() {
-        if(!centerWebService.isWorking()) {
-            firstTime = false;
-            centerWebService.getCenters();
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if(centerWebService.isWorking() && centerWebService.isPaused()) {
+            centerWebService.startRequest();
+        }
+        if(centerWebService.isFirstTime()) {
+            progressBar.setVisibility(View.VISIBLE);
         }
     }
 
     @Override
-    synchronized public void onResponse(Center center, int errorCode, boolean endInformation) {
+    protected void onPause() {
+        super.onPause();
+        centerWebService.stopRequest();
+        pagerAdapter.endRefreshing();
+    }
 
-        //Check error code
+    @Override
+    public void onResponse(Center center, int errorCode, boolean endInformation) {
+
+        //Manage error codes
         switch(errorCode) {
             case CenterWebService.OK:           //Update centers data
                 centerManager.addCenter(center);
-                updateFragmentsState(UPDATE_CENTERS);
+                pagerAdapter.notifyDataSetChanged();
+                if(endInformation) {
+                    Toast.makeText(this, getString(R.string.load_complete), Toast.LENGTH_SHORT)
+                            .show();
+                }
                 break;
             case CenterWebService.HTTP_ERROR:   //Connection error
                 Toast.makeText(this, getString(R.string.connection_error), Toast.LENGTH_SHORT)
@@ -141,64 +135,35 @@ public class CenterListActivity extends AppCompatActivity implements AsyncCenter
                 break;
         }
 
-        //Check if data is complete
         if(endInformation) {
-            updateFragmentsState(STOP_REFRESH_STATE);
+            progressBar.setVisibility(View.GONE);
+            pagerAdapter.endRefreshing();
         }
 
     }
 
-    private void updateFragmentsState(int mode) {
-        switch(mode) {
-            case UPDATE_CENTERS:        //Notify centers have been updated
-                for(int i = 0; i < TOTAL_TABS; i++) {
-                    fragments[i].updatedCenters();
-                }
-                tabAdapter.notifyDataSetChanged();
-                break;
-            case STOP_REFRESH_STATE:    //Notify refresh has finished
-                refreshListener.refreshedList();
-                break;
-        }
-    }
-
-    private void updateWebServiceState(int mode) {
-        switch(mode) {
-            case START_WEB_SERVICE: //Start searching data if data search is paused
-                if(centerWebService.isPaused()) {
-                    centerWebService.startRequest();
-                }
-                break;
-            case STOP_WEB_SERVICE:  //Stop searching data if data search is working
-                if(centerWebService.isWorking()) {
-                    centerWebService.stopRequest();
-                }
-                break;
+    @Override
+    public boolean refreshActivity() {
+        if(centerWebService.isWorking()) {
+            return false;
+        } else {
+            centerWebService.getCenters();
+            return true;
         }
     }
 
     @Override
-    protected void onStart() {
-        updateWebServiceState(START_WEB_SERVICE);
-        super.onStart();
-    }
-
-    @Override
-    protected void onPause() {
-        updateWebServiceState(STOP_WEB_SERVICE);
-        super.onPause();
-    }
-
-    public boolean isLoading() {
-        return centerWebService.isWorking();
-    }
-
-    public void showMap(View view) {
-        if(!centerWebService.isWorking() && !centerManager.getCenters().isEmpty()) {
-            Intent intent = new Intent(this, MapActivity.class);
+    public void showCenterContent(Center center) {
+        if(!centerWebService.isWorking()) {
+            Intent intent = new Intent(this, CenterActivity.class);
+            intent.putExtra(CenterActivity.CENTER_EXTRA, center);
             startActivity(intent);
         } else {
-            Toast.makeText(this, getString(R.string.wait_loading), Toast.LENGTH_SHORT).show();
+            if(centerWebService.isFirstTime()) {
+                Toast.makeText(this, getString(R.string.wait_loading), Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, getString(R.string.wait_refresh), Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
@@ -206,14 +171,32 @@ public class CenterListActivity extends AppCompatActivity implements AsyncCenter
         if(!centerWebService.isWorking()) {
             Toast.makeText(this, "In progress...", Toast.LENGTH_SHORT).show();
         } else {
-            Toast.makeText(this, getString(R.string.wait_loading), Toast.LENGTH_SHORT).show();
+            if(centerWebService.isFirstTime()) {
+                Toast.makeText(this, getString(R.string.wait_loading), Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, getString(R.string.wait_refresh), Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    public void showMap(View view) {
+        //&& !centerManager.getCenters().isEmpty()
+        if(!centerWebService.isWorking()) {
+            Intent intent = new Intent(this, MapActivity.class);
+            startActivity(intent);
+        } else {
+            if(centerWebService.isFirstTime()) {
+                Toast.makeText(this, getString(R.string.wait_loading), Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, getString(R.string.wait_refresh), Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        outState.putBoolean(FIRST_TIME_KEY, firstTime);
         super.onSaveInstanceState(outState);
+        outState.putBoolean(TIME_KEY, centerWebService.isFirstTime());
     }
 
 }

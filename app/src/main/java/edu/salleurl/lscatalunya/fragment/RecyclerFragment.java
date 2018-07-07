@@ -1,6 +1,5 @@
-package edu.salleurl.lscatalunya.test;
+package edu.salleurl.lscatalunya.fragment;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -9,27 +8,29 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
 
 import edu.salleurl.lscatalunya.R;
-import edu.salleurl.lscatalunya.activities.CenterActivity;
+import edu.salleurl.lscatalunya.activities.ListActivity;
+import edu.salleurl.lscatalunya.activities.RefreshActivity;
 import edu.salleurl.lscatalunya.model.Center;
+import edu.salleurl.lscatalunya.adapters.ListAdapter;
+import edu.salleurl.lscatalunya.listeners.RefreshListener;
 
-public class TestFragment extends Fragment implements RefreshFragment, RecyclerClickManager {
+public class RecyclerFragment extends Fragment implements RecyclerRefreshManager, RecyclerClickManager {
 
     //Extra key
     private final static String CENTERS_EXTRA = "centersExtra";
 
-    public static TestFragment newInstance(ArrayList<Center> centers) {
-        TestFragment testFragment = new TestFragment();
+    public static RecyclerFragment newInstance(ArrayList<Center> centers) {
+        RecyclerFragment recyclerFragment = new RecyclerFragment();
         Bundle args = new Bundle();
         args.putParcelableArrayList(CENTERS_EXTRA, centers);
-        testFragment.setArguments(args);
-        return testFragment;
+        recyclerFragment.setArguments(args);
+        return recyclerFragment;
     }
 
     @Nullable
