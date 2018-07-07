@@ -14,13 +14,15 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import edu.salleurl.lscatalunya.R;
+import edu.salleurl.lscatalunya.activities.CenterActivity;
 import edu.salleurl.lscatalunya.activities.MapActivity;
 import edu.salleurl.lscatalunya.model.Center;
 import edu.salleurl.lscatalunya.model.CenterManager;
 import edu.salleurl.lscatalunya.repositories.impl.CenterWebService;
 import edu.salleurl.lscatalunya.repositories.json.JsonException;
 
-public class TestActivity extends FragmentActivity implements CenterWebService.Callback, RefreshActivity {
+public class TestActivity extends FragmentActivity implements CenterWebService.Callback, RefreshActivity,
+        ListActivity {
 
     //Instance keys
     private final static String TIME_KEY = "loadKey";
@@ -101,16 +103,6 @@ public class TestActivity extends FragmentActivity implements CenterWebService.C
     }
 
     @Override
-    public boolean refreshActivity() {
-        if(centerWebService.isWorking()) {
-            return false;
-        } else {
-            centerWebService.getCenters();
-            return true;
-        }
-    }
-
-    @Override
     protected void onPause() {
         super.onPause();
         centerWebService.stopRequest();
@@ -149,6 +141,31 @@ public class TestActivity extends FragmentActivity implements CenterWebService.C
             pagerAdapter.endRefreshing();
         }
 
+    }
+
+    @Override
+    public boolean refreshActivity() {
+        if(centerWebService.isWorking()) {
+            return false;
+        } else {
+            centerWebService.getCenters();
+            return true;
+        }
+    }
+
+    @Override
+    public void showCenterContent(Center center) {
+        if(!centerWebService.isWorking()) {
+            Intent intent = new Intent(this, CenterActivity.class);
+            intent.putExtra(CenterActivity.CENTER_EXTRA, center);
+            startActivity(intent);
+        } else {
+            if(centerWebService.isFirstTime()) {
+                Toast.makeText(this, getString(R.string.wait_loading), Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, getString(R.string.wait_refresh), Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     public void showLogin(View view) {

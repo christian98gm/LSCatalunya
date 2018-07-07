@@ -12,12 +12,17 @@ import edu.salleurl.lscatalunya.R;
 import edu.salleurl.lscatalunya.holders.CenterHolder;
 import edu.salleurl.lscatalunya.model.Center;
 
-public class ListAdapter extends RecyclerView.Adapter<CenterHolder> {
+public class ListAdapter extends RecyclerView.Adapter<CenterHolder> implements View.OnClickListener {
 
     private ArrayList<Center> centers;
+    private RecyclerView recyclerView;
+    private RecyclerClickManager recyclerClickManager;
 
-    public ListAdapter(ArrayList<Center> centers) {
+    public ListAdapter(ArrayList<Center> centers, RecyclerView recyclerView,
+                       RecyclerClickManager recyclerClickManager) {
         this.centers = centers;
+        this.recyclerView = recyclerView;
+        this.recyclerClickManager = recyclerClickManager;
     }
 
     @NonNull
@@ -25,6 +30,7 @@ public class ListAdapter extends RecyclerView.Adapter<CenterHolder> {
     public CenterHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_center_list_center,
                 parent, false);
+        view.setOnClickListener(this);
         return new CenterHolder(view);
     }
 
@@ -44,6 +50,12 @@ public class ListAdapter extends RecyclerView.Adapter<CenterHolder> {
     @Override
     public int getItemCount() {
         return centers.size();
+    }
+
+    @Override
+    public void onClick(View view) {
+        int position = recyclerView.getChildLayoutPosition(view);
+        recyclerClickManager.recyclerClick(centers.get(position));
     }
 
 }

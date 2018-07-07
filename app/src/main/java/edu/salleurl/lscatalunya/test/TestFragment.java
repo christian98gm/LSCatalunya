@@ -1,5 +1,6 @@
 package edu.salleurl.lscatalunya.test;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -8,15 +9,17 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
 
 import edu.salleurl.lscatalunya.R;
+import edu.salleurl.lscatalunya.activities.CenterActivity;
 import edu.salleurl.lscatalunya.model.Center;
 
-public class TestFragment extends Fragment implements RefreshFragment {
+public class TestFragment extends Fragment implements RefreshFragment, RecyclerClickManager {
 
     //Extra key
     private final static String CENTERS_EXTRA = "centersExtra";
@@ -36,7 +39,7 @@ public class TestFragment extends Fragment implements RefreshFragment {
 
         //Link views
         View view = inflater.inflate(R.layout.activity_center_list_items, container, false);
-        RecyclerView recyclerView = view.findViewById(R.id.centerListItems);
+        final RecyclerView recyclerView = view.findViewById(R.id.centerListItems);
         SwipeRefreshLayout swipeRefreshLayout = view.findViewById(R.id.centerListRefresh);
 
         //Link layout manager
@@ -44,10 +47,10 @@ public class TestFragment extends Fragment implements RefreshFragment {
 
         //Get arguments
         Bundle args = getArguments();
-        ArrayList<Center> centers = args.getParcelableArrayList(CENTERS_EXTRA);
+        final ArrayList<Center> centers = args.getParcelableArrayList(CENTERS_EXTRA);
 
         //Link list adapter
-        ListAdapter listAdapter = new ListAdapter(centers);
+        ListAdapter listAdapter = new ListAdapter(centers, recyclerView, this);
         recyclerView.setAdapter(listAdapter);
 
         //Link refresh adapter
@@ -71,6 +74,14 @@ public class TestFragment extends Fragment implements RefreshFragment {
         if(getView() != null) {
             SwipeRefreshLayout swipeRefreshLayout = getView().findViewById(R.id.centerListRefresh);
             swipeRefreshLayout.setRefreshing(false);
+        }
+    }
+
+    @Override
+    public void recyclerClick(Center center) {
+        if(getActivity() != null) {
+            ListActivity listActivity = (ListActivity) getActivity();
+            listActivity.showCenterContent(center);
         }
     }
 
