@@ -14,6 +14,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -77,7 +78,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         setContentView(R.layout.activity_map);
 
         //Get sheet behavior
-        sheetBehavior = BottomSheetBehavior.from(findViewById(R.id.mapBottomSheet));
+        RelativeLayout bottomSheet = findViewById(R.id.mapBottomSheet);
+        sheetBehavior = BottomSheetBehavior.from(bottomSheet);
         sheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
             @Override
             public void onStateChanged(@NonNull View bottomSheet, int newState) {
@@ -201,6 +203,14 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     public void showCentersList(View view) {
         finish();
+    }
+
+    public void showCenterContent(View view) {
+        if(sheetCenter != null) {
+            Intent intent = new Intent(this, CenterActivity.class);
+            intent.putExtra(CenterActivity.CENTER_EXTRA, sheetCenter);
+            startActivity(intent);
+        }
     }
 
     @Override

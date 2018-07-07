@@ -80,7 +80,8 @@
         app:behavior_hideable="true"
         app:layout_behavior="android.support.design.widget.BottomSheetBehavior"
         android:padding="16dp"
-        android:background="@android:color/white">
+        android:background="@drawable/item_clickable"
+        android:onClick="showCenterContent">
 
         <LinearLayout
             android:layout_width="match_parent"
