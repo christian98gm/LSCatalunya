@@ -63,10 +63,17 @@ public class CenterActivity extends AppCompatActivity {
     }
 
     public void showMap(View view) {
+
+        //Close activity if exists
+        Intent closeIntent = new Intent(MapActivity.CLOSE_INTENT);
+        sendBroadcast(closeIntent);
+
+        //Launch activity
         Intent intent = new Intent(this, MapActivity.class);
         intent.putExtra(MapActivity.CENTER_EXTRA, center);
         startActivity(intent);
         finish();
+
     }
 
     @Override

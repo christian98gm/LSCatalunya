@@ -3,7 +3,10 @@ package edu.salleurl.lscatalunya.activities;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.FragmentTransaction;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -41,6 +44,7 @@ import edu.salleurl.lscatalunya.model.CenterManager;
 public class MapActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     public final static String CENTER_EXTRA = "addressExtra";
+    public final static String CLOSE_INTENT = "closeIntent";
 
     //Saved instance keys
     private final static String POSITION_KEY = "positionKey";
@@ -207,9 +211,24 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     public void showCenterContent(View view) {
         if(sheetCenter != null) {
+
+            //Register receiver to close activity if necessary
+            BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+                @Override
+                public void onReceive(Context context, Intent intent) {
+                    String action = intent.getAction();
+                    if(action.equals(CLOSE_INTENT)) {
+                        finish();
+                    }
+                }
+            };
+            registerReceiver(broadcastReceiver, new IntentFilter(CLOSE_INTENT));
+
+            //Start activity
             Intent intent = new Intent(this, CenterActivity.class);
             intent.putExtra(CenterActivity.CENTER_EXTRA, sheetCenter);
             startActivity(intent);
+
         }
     }
 
