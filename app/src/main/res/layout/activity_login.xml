@@ -59,19 +59,23 @@
 
         </android.support.design.widget.TextInputLayout>
 
-        <Button android:id="@+id/login_button"
+        <Button
+            android:id="@+id/login_button"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginBottom="8dp"
             android:layout_weight="1"
-            android:text="@string/log_in_button"/>
+            android:onClick="login"
+            android:text="@string/log_in_button" />
 
-        <Button android:id="@+id/register_button"
+        <Button
+            android:id="@+id/register_button"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginBottom="8dp"
             android:layout_weight="1"
-            android:text="@string/register_button"/>
+            android:onClick="register"
+            android:text="@string/register_button" />
 
         <TextView
             android:layout_width="match_parent"
@@ -80,25 +84,31 @@
             android:gravity="center"
             android:text="@string/or" />
 
-        <Button android:id="@+id/fb_login_button"
+        <Button
+            android:id="@+id/fb_login_button"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginBottom="8dp"
             android:layout_weight="1"
-            android:text="@string/login_fb_button"/>
+            android:onClick="loginFB"
+            android:text="@string/login_fb_button" />
 
-        <Button android:id="@+id/twtt_login_button"
+        <Button
+            android:id="@+id/twtt_login_button"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginBottom="8dp"
             android:layout_weight="1"
-            android:text="@string/login_twt_button"/>
+            android:onClick="loginTWT"
+            android:text="@string/login_twt_button" />
 
-        <Button android:id="@+id/google_login_button"
+        <Button
+            android:id="@+id/google_login_button"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginBottom="8dp"
             android:layout_weight="1"
-            android:text="@string/login_gg_button"/>
+            android:onClick="loginGOG"
+            android:text="@string/login_gg_button" />
     </LinearLayout>
 </LinearLayout>
