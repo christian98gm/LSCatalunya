@@ -42,4 +42,12 @@
         <item>@string/others</item>
     </string-array>
     <string name="google_maps_api_key">AIzaSyAprP-uJv4hnhyd_6svpjTT3S75XEp-owo</string>
+    <string name="login_hint">Username or Email</string>
+    <string name="password">Password</string>
+    <string name="log_in_button">LOG IN</string>
+    <string name="register_button">REGISTER</string>
+    <string name="login_fb_button">LOGIN WITH FACEBOOK</string>
+    <string name="login_twt_button">LOGIN WITH TWITTER</string>
+    <string name="login_gg_button">LOGIN WITH GOOGLE</string>
+    <string name="or">OR</string>
 </resources>

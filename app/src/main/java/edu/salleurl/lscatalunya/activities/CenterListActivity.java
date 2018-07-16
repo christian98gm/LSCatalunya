@@ -169,7 +169,11 @@ public class CenterListActivity extends FragmentActivity implements CenterWebSer
 
     public void showLogin(View view) {
         if(!centerWebService.isWorking()) {
-            Toast.makeText(this, "In progress...", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this, "In progress...", Toast.LENGTH_SHORT).show();
+
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
+
         } else {
             if(centerWebService.isFirstTime()) {
                 Toast.makeText(this, getString(R.string.wait_loading), Toast.LENGTH_SHORT).show();
