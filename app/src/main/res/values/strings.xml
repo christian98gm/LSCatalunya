@@ -50,4 +50,11 @@
     <string name="login_twt_button">LOGIN WITH TWITTER</string>
     <string name="login_gg_button">LOGIN WITH GOOGLE</string>
     <string name="or">OR</string>
+    <string name="username_hint">Username</string>
+    <string name="firstname_hint">Firstname</string>
+    <string name="lastname_hint">Lastname</string>
+    <string name="email_hint">Email</string>
+    <string name="confirm_pass_hint">Confirm Password</string>
+    <string name="login_appbar_title">Login for admins</string>
+    <string name="register_appbar_title">Register new admin</string>
 </resources>
