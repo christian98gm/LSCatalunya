@@ -4,6 +4,7 @@ import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -12,10 +13,15 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.gms.maps.model.LatLng;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import edu.salleurl.lscatalunya.model.Center;
 import edu.salleurl.lscatalunya.repositories.AsyncCenterRepo;
@@ -57,24 +63,24 @@ public class CenterWebService implements AsyncCenterRepo {
     //Instance
     private static CenterWebService instance;
 
-    private CenterWebService(Context context, AsyncCenterRepo.Callback callback) {
+    private CenterWebService(Context context, Callback Callback) {
         isFirstTime = true;
         requestQueue = Volley.newRequestQueue(context);
         this.context = context;
-        this.callback = callback;
+        this.callback = Callback;
     }
 
-    public static CenterWebService getInstance(Context context, AsyncCenterRepo.Callback callback) {
-        if(instance == null) {
-            instance = new CenterWebService(context, callback);
+    public static CenterWebService getInstance(Context context, Callback Callback) {
+        if (instance == null) {
+            instance = new CenterWebService(context, Callback);
         }
-        instance.callback = callback;
+        instance.callback = Callback;
         return instance;
     }
 
     @Override
     public void getCenters() {
-        if(!isWorking) {
+        if (!isWorking) {
             isWorking = true;
             isPaused = false;
             String url = URL + '?' + METHOD_PARAM + '=' + GET_SCHOOLS_METHOD;
@@ -92,10 +98,10 @@ public class CenterWebService implements AsyncCenterRepo {
                                         isFirstTime = false;
                                         isWorking = false;
                                     }
-                                    callback.onResponse(center, OK, i == (totalCenters - 1));
+                                    callback.onGetCentersResponse(center, OK, i == (totalCenters - 1));
                                 }
                             } catch (JsonException e) {
-                                callback.onResponse(null, e.getErrorCode(), true);
+                                callback.onGetCentersResponse(null, e.getErrorCode(), true);
                                 isWorking = false;
                             }
                         }
@@ -104,7 +110,7 @@ public class CenterWebService implements AsyncCenterRepo {
                 public void onErrorResponse(VolleyError error) {
                     isFirstTime = false;
                     isWorking = false;
-                    callback.onResponse(null, HTTP_ERROR, true);
+                    callback.onGetCentersResponse(null, HTTP_ERROR, true);
                 }
             });
             requestQueue.add(request);
@@ -151,10 +157,60 @@ public class CenterWebService implements AsyncCenterRepo {
             Geocoder geocoder = new Geocoder(context, new Locale(CATALONIA_LOCALE));
             List<Address> addresses = geocoder.getFromLocationName(address, 1);
             location = new LatLng(addresses.get(0).getLatitude(), addresses.get(0).getLongitude());
-        } catch(IOException e) {
+        } catch (IOException e) {
             //Address not found
         }
         return location;
     }
+    @Override
+    public void addCenter(final Center center) {
+        RequestQueue queue = Volley.newRequestQueue(context);
+        StringRequest sr = new StringRequest(Request.Method.POST, "https://testapi-pprog2.azurewebsites.net/api/schools.php?", new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    String msg = (String) jsonObject.get("msg");
+                    int res = (int) jsonObject.get("res");
+                    callback.onAddCenterResponse(msg,res);
+                } catch (JSONException e) {
+                    callback.onAddCenterResponse("",2); //2 json error
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                callback.onAddCenterResponse("",3); //3 voley error
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String, String>();
+                StringBuilder sb = new StringBuilder();
+                sb = center.hasChildren() ? sb.append(1): sb.append(0);
+                sb = center.hasPrimary() ? sb.append(1): sb.append(0);
+                sb = center.hasSecondary() ? sb.append(1): sb.append(0);
+                sb = center.hasHighSchool() ? sb.append(1): sb.append(0);
+                sb = center.hasVocationalTraining() ? sb.append(1): sb.append(0);
+                sb = center.hasUniversity() ? sb.append(1): sb.append(0);
 
+                params.put("method", "addSchool");
+                params.put("name", center.getName());
+                params.put("address", center.getAddress());
+                params.put("province", center.getProvince());
+                params.put("type", sb.toString());
+                params.put("description", center.getDescription());
+
+                return params;
+            }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                return params;
+            }
+        };
+        queue.add(sr);
+    }
 }
+

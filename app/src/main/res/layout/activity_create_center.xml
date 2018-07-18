@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:isScrollContainer="false">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:descendantFocusability="beforeDescendants"
+        android:focusable="true"
+        android:focusableInTouchMode="true">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar_create_center"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:fontFamily="@font/roboto"
+                android:text="@string/create_new_school"
+                android:textColor="@android:color/white"
+                android:textSize="20sp" />
+
+        </android.support.v7.widget.Toolbar>
+
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_margin="4dp">
+
+            <EditText
+                android:id="@+id/create_center_name"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="2"
+                android:fontFamily="@font/roboto"
+                android:hint="@string/school_name"
+                android:inputType="text"
+                android:textColorHint="@android:color/black" />
+
+            <EditText
+                android:id="@+id/create_center_address"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="2"
+                android:fontFamily="@font/roboto"
+                android:hint="@string/school_address"
+                android:inputType="textPostalAddress"
+                android:textColorHint="@android:color/black" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.8"
+                android:fontFamily="@font/roboto"
+                android:text="@string/school_state_province"
+                android:textColor="@android:color/darker_gray" />
+
+            <Spinner
+                android:id="@+id/create_center_province"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="2"
+                android:entries="@array/array_provinces"
+                android:fontFamily="@font/roboto" />
+
+            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="4"
+                android:orientation="vertical">
+
+                <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="2"
+                    android:orientation="horizontal"
+                    tools:ignore="NestedWeights">
+
+                    <Button
+                        android:id="@+id/button_children"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="4dp"
+                        android:layout_weight="2"
+                        android:background="@android:color/holo_purple"
+                        android:fontFamily="@font/roboto"
+                        android:singleLine="true"
+                        android:text="@string/children"
+                        android:textColor="@android:color/white" />
+
+                    <Button
+                        android:id="@+id/button_primary"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="4dp"
+                        android:layout_weight="2"
+                        android:background="@color/yellow"
+                        android:fontFamily="@font/roboto"
+                        android:singleLine="true"
+                        android:text="@string/primary"
+                        android:textColor="@android:color/white" />
+
+                    <Button
+                        android:id="@+id/button_secondary"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="4dp"
+                        android:layout_weight="2"
+                        android:background="@android:color/holo_orange_light"
+                        android:fontFamily="@font/roboto"
+                        android:singleLine="true"
+                        android:text="@string/secondary"
+                        android:textColor="@android:color/white" />
+                </LinearLayout>
+
+                <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="2"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/button_high_school"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="4dp"
+                        android:layout_weight="2"
+                        android:background="@android:color/holo_red_light"
+                        android:fontFamily="@font/roboto"
+                        android:singleLine="true"
+                        android:text="@string/high_school"
+                        android:textColor="@android:color/white" />
+
+                    <Button
+                        android:id="@+id/button_vocational_training"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="4dp"
+                        android:layout_weight="2"
+                        android:background="@android:color/holo_green_light"
+                        android:fontFamily="@font/roboto"
+                        android:singleLine="true"
+                        android:text="@string/voc_training"
+                        android:textColor="@android:color/white" />
+
+                    <Button
+                        android:id="@+id/button_university"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="4dp"
+                        android:layout_weight="2"
+                        android:background="@android:color/holo_blue_light"
+                        android:fontFamily="@font/roboto"
+                        android:singleLine="true"
+                        android:text="@string/university"
+                        android:textColor="@android:color/white" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.8"
+                android:fontFamily="@font/roboto"
+                android:text="@string/description"
+                android:textColor="@android:color/darker_gray" />
+
+            <EditText
+                android:id="@+id/create_center_description"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="4"
+                android:fontFamily="@font/roboto"
+                android:gravity="top|start"
+                android:inputType="textMultiLine" />
+
+            <Button
+                android:id="@+id/create_center_button"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_margin="5dp"
+                android:layout_weight="1.6"
+                android:background="?attr/colorPrimary"
+                android:fontFamily="@font/roboto"
+                android:text="@string/create_school"
+                android:textColor="@android:color/white" />
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>

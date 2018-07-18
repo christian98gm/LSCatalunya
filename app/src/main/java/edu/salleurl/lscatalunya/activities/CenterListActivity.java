@@ -16,11 +16,12 @@ import android.widget.Toast;
 import edu.salleurl.lscatalunya.R;
 import edu.salleurl.lscatalunya.model.Center;
 import edu.salleurl.lscatalunya.model.CenterManager;
+import edu.salleurl.lscatalunya.repositories.AsyncCenterRepo;
 import edu.salleurl.lscatalunya.repositories.impl.CenterWebService;
 import edu.salleurl.lscatalunya.repositories.json.JsonException;
 import edu.salleurl.lscatalunya.adapters.PagerAdapter;
-
-public class CenterListActivity extends FragmentActivity implements CenterWebService.Callback, RefreshActivity,
+/*Llista centres. Default activity*/
+public class CenterListActivity extends FragmentActivity implements AsyncCenterRepo.Callback, RefreshActivity,
         ListActivity {
 
     //Instance keys
@@ -109,7 +110,7 @@ public class CenterListActivity extends FragmentActivity implements CenterWebSer
     }
 
     @Override
-    public void onResponse(Center center, int errorCode, boolean endInformation) {
+    public void onGetCentersResponse(Center center, int errorCode, boolean endInformation) {
 
         //Manage error codes
         switch(errorCode) {
@@ -139,6 +140,11 @@ public class CenterListActivity extends FragmentActivity implements CenterWebSer
             progressBar.setVisibility(View.GONE);
             pagerAdapter.endRefreshing();
         }
+
+    }
+
+    @Override
+    public void onAddCenterResponse(String msg, int success) {
 
     }
 

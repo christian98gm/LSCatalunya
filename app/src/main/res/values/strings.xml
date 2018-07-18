@@ -21,7 +21,6 @@
     <string name="read_error">Could not read center data</string>
     <string name="add_error">Could not add school to our services</string>
     <string name="delete_error">Could not delete school from our services</string>
-    <string name="description">Description</string>
     <string name="loading_centers">Loading centers from LaSalle Catalunya</string>
     <string name="wait_loading">Wait until centers are loaded</string>
     <string name="show_centers_list">Show centers list</string>
@@ -42,4 +41,18 @@
         <item>@string/others</item>
     </string-array>
     <string name="google_maps_api_key">AIzaSyAprP-uJv4hnhyd_6svpjTT3S75XEp-owo</string>
+    <string name="create_new_school">Create a new school</string>
+    <string name="school_name">School Name</string>
+    <string name="school_address">School Address</string>
+    <string-array name="array_provinces">
+        <item>Lleida</item>
+        <item>Barcelona</item>
+        <item>Girona</item>
+        <item>Tarragona</item>
+    </string-array>
+    <string name="description">Description</string>
+    <string name="create_school">Create School</string>
+    <string name="voc_training">Voc. Training</string>
+    <string name="school_state_province">School State/Province</string>
+
 </resources>

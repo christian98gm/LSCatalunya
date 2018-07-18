@@ -20,6 +20,7 @@ public class Center implements Parcelable {
     private boolean hasUniversity;
     private String description;
     private LatLng location;
+    private String province;
 
     public Center() {}
 
@@ -35,6 +36,7 @@ public class Center implements Parcelable {
         hasUniversity = in.readByte() != 0;
         description = in.readString();
         location = in.readParcelable(LatLng.class.getClassLoader());
+        province = in.readString();
     }
 
     @Override
@@ -50,6 +52,7 @@ public class Center implements Parcelable {
         dest.writeByte((byte) (hasUniversity ? 1 : 0));
         dest.writeString(description);
         dest.writeParcelable(location, flags);
+        dest.writeString(province);
     }
 
     @Override
@@ -155,6 +158,14 @@ public class Center implements Parcelable {
 
     public void setLocation(LatLng location) {
         this.location = location;
+    }
+
+    public String getProvince() {
+        return province;
+    }
+
+    public void setProvince(String province) {
+        this.province = province;
     }
 
     @Override

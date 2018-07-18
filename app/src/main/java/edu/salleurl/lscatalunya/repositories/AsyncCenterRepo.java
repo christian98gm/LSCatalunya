@@ -5,9 +5,11 @@ import edu.salleurl.lscatalunya.model.Center;
 public interface AsyncCenterRepo {
 
     interface Callback {
-        void onResponse(Center center, int errorCode, boolean endInformation);
+        void onGetCentersResponse(Center center, int errorCode, boolean endInformation);
+        void onAddCenterResponse(String msg, int success);
     }
 
     void getCenters();
 
+    void addCenter(final Center center);
 }

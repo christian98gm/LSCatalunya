@@ -9,8 +9,10 @@ import android.widget.TextView;
 
 import edu.salleurl.lscatalunya.R;
 import edu.salleurl.lscatalunya.model.Center;
+import edu.salleurl.lscatalunya.repositories.AsyncCenterRepo;
 
-public class CenterActivity extends AppCompatActivity {
+/*Descripció centre. Surt quan es clica objecte CenterListActivity(DEFAULT LAUNCHER)*/
+public class CenterActivity extends AppCompatActivity implements AsyncCenterRepo.Callback{
 
     public final static String CENTER_EXTRA = "centerExtra";
     private final static String CENTER_KEY = "centerKey";
@@ -82,4 +84,13 @@ public class CenterActivity extends AppCompatActivity {
         super.onSaveInstanceState(outState);
     }
 
+    @Override
+    public void onAddCenterResponse(String msg, int success) {
+
+    }
+
+    @Override
+    public void onGetCentersResponse(Center center, int errorCode, boolean endInformation) {
+
+    }
 }
