@@ -18,12 +18,8 @@ public class DBHelper extends SQLiteOpenHelper{
     private static final String USERS_COLUMN_SURNAME = "surname";
     private static final String USERS_COLUMN_EMAIL = "email";
 
-    public DBHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
-        super(context, DATABASE_NAME, factory, version);
-    }
-
-    public DBHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version, DatabaseErrorHandler errorHandler) {
-        super(context, name, factory, version, errorHandler);
+    public DBHelper(Context context) {
+        super(context, DATABASE_NAME, null, 1);
     }
 
     @Override
@@ -70,8 +66,8 @@ public class DBHelper extends SQLiteOpenHelper{
 
     public boolean userRegistered(String user, String pass) {
         SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
-        String[] args = {user, pass};
-        Cursor c = sqLiteDatabase.rawQuery("SELECT * FROM " + USERS_TABLE_NAME + " WHERE " + USERS_COLUMN_USER + " =? " + " AND " + USERS_COLUMN_PASS + " =?", args);
+        String[] args = {user, user, pass};
+        Cursor c = sqLiteDatabase.rawQuery("SELECT * FROM " + USERS_TABLE_NAME + " WHERE (" + USERS_COLUMN_USER + " =? " + " OR " + USERS_COLUMN_EMAIL + " =?) AND " + USERS_COLUMN_PASS + " =?", args);
         if (c.moveToFirst()) {
             return true;
         }

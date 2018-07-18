@@ -40,7 +40,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <EditText
+            <EditText android:id="@+id/username_register_etx"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:hint="@string/username_hint"
@@ -51,7 +51,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <EditText
+            <EditText android:id="@+id/firstname_register_etx"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:hint="@string/firstname_hint"
@@ -62,7 +62,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <EditText
+            <EditText android:id="@+id/lastname_register_etx"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:hint="@string/lastname_hint"
@@ -73,7 +73,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <EditText
+            <EditText android:id="@+id/email_register_etx"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:hint="@string/email_hint"
@@ -84,7 +84,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <EditText
+            <EditText android:id="@+id/pass_register_etx"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:hint="@string/password"
@@ -95,7 +95,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <EditText
+            <EditText android:id="@+id/passconfirm_register_etx"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:hint="@string/confirm_pass_hint"
@@ -105,6 +105,7 @@
         <Button
             android:layout_width="match_parent"
             android:layout_height="@dimen/button_height_dim"
-            android:text="@string/register_button" />
+            android:text="@string/register_button"
+            android:onClick="register"/>
     </LinearLayout>
 </LinearLayout>
