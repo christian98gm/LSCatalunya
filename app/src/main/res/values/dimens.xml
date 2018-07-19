@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="button_height_dim">60dp</dimen>
+    <dimen name="line_gap">16dp</dimen>
+    <dimen name="appbar_title_size">18dp</dimen>
+</resources>

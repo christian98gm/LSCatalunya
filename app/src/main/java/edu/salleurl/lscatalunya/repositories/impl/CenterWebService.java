@@ -156,8 +156,10 @@ public class CenterWebService implements AsyncCenterRepo {
         try {
             Geocoder geocoder = new Geocoder(context, new Locale(CATALONIA_LOCALE));
             List<Address> addresses = geocoder.getFromLocationName(address, 1);
-            location = new LatLng(addresses.get(0).getLatitude(), addresses.get(0).getLongitude());
-        } catch (IOException e) {
+            if(!addresses.isEmpty()) {
+                location = new LatLng(addresses.get(0).getLatitude(), addresses.get(0).getLongitude());
+            }
+        } catch(IOException e) {
             //Address not found
         }
         return location;

@@ -54,5 +54,21 @@
     <string name="create_school">Create School</string>
     <string name="voc_training">Voc. Training</string>
     <string name="school_state_province">School State/Province</string>
-
+    <string name="login_hint">Username or Email</string>
+    <string name="password">Password</string>
+    <string name="log_in_button">LOG IN</string>
+    <string name="register_button">REGISTER</string>
+    <string name="login_fb_button">LOGIN WITH FACEBOOK</string>
+    <string name="login_twt_button">LOGIN WITH TWITTER</string>
+    <string name="login_gg_button">LOGIN WITH GOOGLE</string>
+    <string name="or">OR</string>
+    <string name="username_hint">Username</string>
+    <string name="firstname_hint">Firstname</string>
+    <string name="lastname_hint">Lastname</string>
+    <string name="email_hint">Email</string>
+    <string name="confirm_pass_hint">Confirm Password</string>
+    <string name="login_appbar_title">Login for admins</string>
+    <string name="register_appbar_title">Register new admin</string>
+    <string name="logout">Logout</string>
+    <string name="sort">Sort</string>
 </resources>
