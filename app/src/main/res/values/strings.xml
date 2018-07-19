@@ -71,4 +71,8 @@
     <string name="register_appbar_title">Register new admin</string>
     <string name="logout">Logout</string>
     <string name="sort">Sort</string>
+    <string name="alert">Alert</string>
+    <string name= "ok">OK</string>
+    <string name= "successful_introduction">The introduction of the new school was successful!</string>
+
 </resources>
