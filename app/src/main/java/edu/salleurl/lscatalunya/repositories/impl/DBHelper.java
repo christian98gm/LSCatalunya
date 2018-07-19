@@ -38,7 +38,7 @@ public class DBHelper extends SQLiteOpenHelper{
 
     public boolean insertUser(String user, String pass, String name, String surname, String email) {
 
-        if (!userExists(user, email)) {
+        if (!userExists(user, email) && !user.isEmpty() && !pass.isEmpty() && !name.isEmpty() && !surname.isEmpty() && !email.isEmpty()) {
             SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
             ContentValues contentValues = new ContentValues();
             contentValues.put(USERS_COLUMN_USER, user);

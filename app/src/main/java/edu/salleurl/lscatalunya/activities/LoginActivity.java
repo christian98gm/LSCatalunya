@@ -1,10 +1,12 @@
 package edu.salleurl.lscatalunya.activities;
 
 import android.content.Intent;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import edu.salleurl.lscatalunya.R;
 import edu.salleurl.lscatalunya.repositories.impl.DBHelper;
@@ -30,7 +32,12 @@ public class LoginActivity extends AppCompatActivity {
             Intent intent = new Intent(this, CenterManagementListActivity.class);
             startActivity(intent);
         } else {
-            //TODO: SHOW ERROR ON LOGIN
+            TextInputLayout tilUser = findViewById(R.id.user_til_login);
+            tilUser.setError(" ");
+            TextInputLayout tilPass = findViewById(R.id.pass_til_login);
+            tilPass.setError("Invalid user or password");
+            tilUser.setErrorEnabled(true);
+            tilPass.setErrorEnabled(true);
         }
     }
 

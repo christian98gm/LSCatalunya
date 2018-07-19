@@ -71,4 +71,6 @@
     <string name="register_appbar_title">Register new admin</string>
     <string name="logout">Logout</string>
     <string name="sort">Sort</string>
+    <string name="pass_not_match">Passwords don\'t match</string>
+    <string name="invalid_param">One or more fields are invalid or already registered</string>
 </resources>
