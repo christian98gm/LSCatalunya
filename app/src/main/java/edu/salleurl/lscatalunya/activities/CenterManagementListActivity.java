@@ -184,6 +184,7 @@ public class CenterManagementListActivity extends AppCompatActivity implements R
             CenterManager.getInstance().getCenters().remove(deletedItem);
             final RecyclerView recyclerView = findViewById(R.id.centerListItems);
             recyclerView.getAdapter().notifyItemRemoved(deletedIndex);
+            recyclerView.getAdapter().notifyDataSetChanged();
             createConfirmationDeleteDialog(recyclerView);
         }
     }
