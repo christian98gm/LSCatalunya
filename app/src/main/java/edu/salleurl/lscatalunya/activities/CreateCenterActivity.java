@@ -27,10 +27,11 @@ public class CreateCenterActivity extends AppCompatActivity implements View.OnCl
     private boolean[] disabledButtons;
     private int[] buttonsBackgroundColor;
     private final static String CREATE_CENTER = "createCenterExtra";
-    public final static String SPINNER_INFO = "spinnerInfo";
-    public final static String BACKGROUND_INFO = "backgroundInfo";
-    public final static String DIALOG_INFO = "dialogInfo";
+    private final static String SPINNER_INFO = "spinnerInfo";
+    private final static String BACKGROUND_INFO = "backgroundInfo";
+    private final static String DIALOG_INFO = "dialogInfo";
     private int dialogActive = -1;
+    private Toast toastWait;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -164,7 +165,8 @@ public class CreateCenterActivity extends AppCompatActivity implements View.OnCl
             case R.id.create_center_button:
                 saveInfo();
                 CenterWebService.getInstance(this,this).addCenter(center);
-                Toast.makeText(this,getString(R.string.wait), Toast.LENGTH_SHORT).show();
+                toastWait =  Toast.makeText(this,getString(R.string.wait), Toast.LENGTH_SHORT);
+                toastWait.show();
                 break;
         }
     }
@@ -189,13 +191,19 @@ public class CreateCenterActivity extends AppCompatActivity implements View.OnCl
 
     }
     @Override
-    public void onAddCenterResponse(String msg, int typeResponse) {
-        dialogActive = typeResponse;
-        if(typeResponse == 1){
+    public void onAddCenterResponse(String msg, int type) {
+        dialogActive = type;
+        if(type == 1){
             CenterManager.getInstance().addCenter(center);
         }
-        dialogInfo(typeResponse);
+        dialogInfo(type);
     }
+
+    @Override
+    public void onDeleteCenterResponse(String msg, int type) {
+
+    }
+
     private void dialogInfo(int typeResponse){
         AlertDialog alertDialog = new AlertDialog.Builder(this).create();
         alertDialog.setTitle(getString(R.string.alert));
@@ -213,6 +221,7 @@ public class CreateCenterActivity extends AppCompatActivity implements View.OnCl
                 alertDialog.setMessage(getString( R.string.connection_error));
                 break;
         }
+        toastWait.cancel();
         alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, getString(R.string.ok),
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {

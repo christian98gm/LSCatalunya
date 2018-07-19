@@ -1,6 +1,7 @@
 package edu.salleurl.lscatalunya.model;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class CenterManager {
 
@@ -14,6 +15,7 @@ public class CenterManager {
     private ArrayList<Center> others;
     private ArrayList<Center> othersIn;
     private String province;
+
 
     private CenterManager() {
         centers = new ArrayList<>();
@@ -72,7 +74,7 @@ public class CenterManager {
         //Centers
         centersIn.clear();
         for (int i = 0; i < centers.size(); i++) {
-            if (centers.get(i).getAddress().contains(province)) {
+            if (centers.get(i).getAddress().contains(province) || centers.get(i).getProvince().toLowerCase().equals(province.toLowerCase())) {
                 centersIn.add(centers.get(i));
             }
         }
@@ -80,7 +82,7 @@ public class CenterManager {
         //Schools
         schoolsIn.clear();
         for (int i = 0; i < schools.size(); i++) {
-            if (schools.get(i).getAddress().contains(province)) {
+            if (schools.get(i).getAddress().contains(province) || centers.get(i).getProvince().toLowerCase().equals(province.toLowerCase())) {
                 schoolsIn.add(schools.get(i));
             }
         }
@@ -88,9 +90,16 @@ public class CenterManager {
         //Others
         othersIn.clear();
         for (int i = 0; i < others.size(); i++) {
-            if (others.get(i).getAddress().contains(province)) {
+            if (others.get(i).getAddress().contains(province) || centers.get(i).getProvince().toLowerCase().equals(province.toLowerCase())) {
                 othersIn.add(others.get(i));
             }
+        }
+    }
+    public void orderCenters(int type){
+        if(type == 1){
+            Collections.sort(centers);
+        }else{
+            Collections.reverse(centers);
         }
     }
 

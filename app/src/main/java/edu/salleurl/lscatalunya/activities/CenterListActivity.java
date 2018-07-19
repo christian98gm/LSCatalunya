@@ -143,7 +143,12 @@ public class CenterListActivity extends FragmentActivity implements AsyncCenterR
     }
 
     @Override
-    public void onAddCenterResponse(String msg, int success) {
+    public void onAddCenterResponse(String msg, int type) {
+
+    }
+
+    @Override
+    public void onDeleteCenterResponse(String msg, int type) {
 
     }
 
