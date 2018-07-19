@@ -21,7 +21,8 @@
         </activity>
         <activity android:name=".activities.CenterActivity" />
         <activity android:name=".activities.MapActivity" />
-        <activity android:name=".activities.CreateCenterActivity"/>
+        <activity android:name=".activities.CreateCenterActivity">
+        </activity>
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
@@ -31,7 +32,9 @@
 
         <activity android:name=".activities.LoginActivity" />
         <activity android:name=".activities.RegisterActivity" />
-        <activity android:name=".activities.CenterManagementListActivity"/>
+
+        <activity android:name=".activities.CenterManagementListActivity">
+        </activity>
     </application>
 
 </manifest>

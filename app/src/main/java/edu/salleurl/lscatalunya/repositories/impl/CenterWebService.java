@@ -116,7 +116,10 @@ public class CenterWebService implements AsyncCenterRepo {
             requestQueue.add(request);
         }
     }
-
+    public void newContext(Context c){
+        requestQueue = Volley.newRequestQueue(c);
+        this.context = c;
+    }
     public void stopRequest() {
         isPaused = true;
         requestQueue.stop();

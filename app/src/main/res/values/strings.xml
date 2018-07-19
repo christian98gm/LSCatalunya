@@ -74,5 +74,6 @@
     <string name="alert">Alert</string>
     <string name= "ok">OK</string>
     <string name= "successful_introduction">The introduction of the new school was successful!</string>
+    <string name= "wait">Wait..</string>
 
 </resources>

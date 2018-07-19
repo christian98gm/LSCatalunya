@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import edu.salleurl.lscatalunya.R;
 import edu.salleurl.lscatalunya.model.Center;
+import edu.salleurl.lscatalunya.model.CenterManager;
 import edu.salleurl.lscatalunya.repositories.AsyncCenterRepo;
 import edu.salleurl.lscatalunya.repositories.impl.CenterWebService;
 
@@ -163,6 +164,7 @@ public class CreateCenterActivity extends AppCompatActivity implements View.OnCl
             case R.id.create_center_button:
                 saveInfo();
                 CenterWebService.getInstance(this,this).addCenter(center);
+                Toast.makeText(this,getString(R.string.wait), Toast.LENGTH_SHORT).show();
                 break;
         }
     }
@@ -189,6 +191,9 @@ public class CreateCenterActivity extends AppCompatActivity implements View.OnCl
     @Override
     public void onAddCenterResponse(String msg, int typeResponse) {
         dialogActive = typeResponse;
+        if(typeResponse == 1){
+            CenterManager.getInstance().addCenter(center);
+        }
         dialogInfo(typeResponse);
     }
     private void dialogInfo(int typeResponse){
@@ -212,7 +217,7 @@ public class CreateCenterActivity extends AppCompatActivity implements View.OnCl
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
-                        finish(); //Tornem a activitar anterior.
+                        finish(); //Tornem a activitat anterior.
                     }
                 });
         alertDialog.show();

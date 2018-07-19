@@ -92,7 +92,6 @@ public class CenterManager {
                 othersIn.add(others.get(i));
             }
         }
-
     }
 
     public ArrayList<Center> getCenters() {
