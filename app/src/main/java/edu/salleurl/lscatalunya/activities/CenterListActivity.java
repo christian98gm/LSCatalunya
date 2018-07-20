@@ -54,7 +54,7 @@ public class CenterListActivity extends FragmentActivity implements AsyncCenterR
 
         //Get center web service
         centerWebService = CenterWebService.getInstance(this, this);
-
+        centerWebService.newContext(this);
         //Link views
         spinner = findViewById(R.id.centerListProvinces);
         progressBar = findViewById(R.id.centerListProgressBar);
@@ -88,7 +88,6 @@ public class CenterListActivity extends FragmentActivity implements AsyncCenterR
             centerWebService.getCenters();
             Toast.makeText(this, getString(R.string.wait_loading), Toast.LENGTH_SHORT).show();
         }
-
     }
 
     @Override
@@ -139,12 +138,18 @@ public class CenterListActivity extends FragmentActivity implements AsyncCenterR
         if(endInformation) {
             progressBar.setVisibility(View.GONE);
             pagerAdapter.endRefreshing();
+            centerManager.setProvince(String.valueOf(spinner.getSelectedItem()));
         }
 
     }
 
     @Override
-    public void onAddCenterResponse(String msg, int success) {
+    public void onAddCenterResponse(String msg, int type) {
+
+    }
+
+    @Override
+    public void onDeleteCenterResponse(String msg, int type) {
 
     }
 
@@ -153,7 +158,8 @@ public class CenterListActivity extends FragmentActivity implements AsyncCenterR
         if(centerWebService.isWorking()) {
             return false;
         } else {
-            centerWebService.getCenters();
+            centerWebService.newContext(this);
+            CenterWebService.getInstance(this,this).getCenters();
             return true;
         }
     }
@@ -175,8 +181,6 @@ public class CenterListActivity extends FragmentActivity implements AsyncCenterR
 
     public void showLogin(View view) {
         if(!centerWebService.isWorking()) {
-            //Toast.makeText(this, "In progress...", Toast.LENGTH_SHORT).show();
-
             Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
 

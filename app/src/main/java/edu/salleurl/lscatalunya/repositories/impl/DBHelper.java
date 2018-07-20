@@ -65,11 +65,14 @@ public class DBHelper extends SQLiteOpenHelper{
 
 
     public boolean userRegistered(String user, String pass) {
-        SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
-        String[] args = {user, user, pass};
-        Cursor c = sqLiteDatabase.rawQuery("SELECT * FROM " + USERS_TABLE_NAME + " WHERE (" + USERS_COLUMN_USER + " =? " + " OR " + USERS_COLUMN_EMAIL + " =?) AND " + USERS_COLUMN_PASS + " =?", args);
-        if (c.moveToFirst()) {
-            return true;
+
+        if(!user.isEmpty() && !pass.isEmpty()) {
+            SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
+            String[] args = {user, user, pass};
+            Cursor c = sqLiteDatabase.rawQuery("SELECT * FROM " + USERS_TABLE_NAME + " WHERE (" + USERS_COLUMN_USER + " =? " + " OR " + USERS_COLUMN_EMAIL + " =?) AND " + USERS_COLUMN_PASS + " =?", args);
+            if (c.moveToFirst()) {
+                return true;
+            }
         }
         return false;
     }

@@ -50,6 +50,8 @@ public class CenterWebService implements AsyncCenterRepo {
     private final static String ADDRESS_PARAM = "address";
     private final static String PROVINCE_PARAM = "province";
     private final static String TYPE_PARAM = "type";
+    private final static String DELETE_SCHOOLS_METHOD = "deleteSchool";
+    private final static String PARAM_ID = "schoolId";
 
     //Attributes
     private RequestQueue requestQueue;
@@ -117,6 +119,11 @@ public class CenterWebService implements AsyncCenterRepo {
         }
     }
 
+    public void newContext(Context c) {
+        requestQueue = Volley.newRequestQueue(c);
+        this.context = c;
+    }
+
     public void stopRequest() {
         isPaused = true;
         requestQueue.stop();
@@ -156,14 +163,43 @@ public class CenterWebService implements AsyncCenterRepo {
         try {
             Geocoder geocoder = new Geocoder(context, new Locale(CATALONIA_LOCALE));
             List<Address> addresses = geocoder.getFromLocationName(address, 1);
-            if(!addresses.isEmpty()) {
+            if (!addresses.isEmpty()) {
                 location = new LatLng(addresses.get(0).getLatitude(), addresses.get(0).getLongitude());
             }
-        } catch(IOException e) {
+        } catch (IOException e) {
             //Address not found
         }
         return location;
     }
+
+    public void deleteCenter(Center center) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(URL).append("?").append(METHOD_PARAM).append("=").append(DELETE_MESSAGE_METHOD)
+                .append("&").append(PARAM_ID).append("=").append(center.getId());
+        String url = sb.toString();
+        StringRequest request = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            String msg = (String) jsonObject.get("msg");
+                            int res = (int) jsonObject.get("res");
+                            callback.onDeleteCenterResponse(msg, res);
+                        } catch (JSONException e) {
+                            callback.onDeleteCenterResponse(e.getMessage(), 2);
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                callback.onDeleteCenterResponse(error.getMessage(), 3);
+            }
+        });
+        requestQueue.add(request);
+    }
+
+
     @Override
     public void addCenter(final Center center) {
         RequestQueue queue = Volley.newRequestQueue(context);
@@ -174,27 +210,27 @@ public class CenterWebService implements AsyncCenterRepo {
                     JSONObject jsonObject = new JSONObject(response);
                     String msg = (String) jsonObject.get("msg");
                     int res = (int) jsonObject.get("res");
-                    callback.onAddCenterResponse(msg,res);
+                    callback.onAddCenterResponse(msg, res);
                 } catch (JSONException e) {
-                    callback.onAddCenterResponse("",2); //2 json error
+                    callback.onAddCenterResponse("", 2); //2 json error
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                callback.onAddCenterResponse("",3); //3 voley error
+                callback.onAddCenterResponse("", 3); //3 voley error
             }
         }) {
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<String, String>();
                 StringBuilder sb = new StringBuilder();
-                sb = center.hasChildren() ? sb.append(1): sb.append(0);
-                sb = center.hasPrimary() ? sb.append(1): sb.append(0);
-                sb = center.hasSecondary() ? sb.append(1): sb.append(0);
-                sb = center.hasHighSchool() ? sb.append(1): sb.append(0);
-                sb = center.hasVocationalTraining() ? sb.append(1): sb.append(0);
-                sb = center.hasUniversity() ? sb.append(1): sb.append(0);
+                sb = center.hasChildren() ? sb.append(1) : sb.append(0);
+                sb = center.hasPrimary() ? sb.append(1) : sb.append(0);
+                sb = center.hasSecondary() ? sb.append(1) : sb.append(0);
+                sb = center.hasHighSchool() ? sb.append(1) : sb.append(0);
+                sb = center.hasVocationalTraining() ? sb.append(1) : sb.append(0);
+                sb = center.hasUniversity() ? sb.append(1) : sb.append(0);
 
                 params.put("method", "addSchool");
                 params.put("name", center.getName());

@@ -2,12 +2,13 @@ package edu.salleurl.lscatalunya.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.Objects;
 
-public class Center implements Parcelable {
+public class Center implements Parcelable, Comparable {
 
     private long id;
     private String name;
@@ -173,16 +174,16 @@ public class Center implements Parcelable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Center center = (Center) o;
-        return id == center.id &&
+        return /*id == center.id &&*/
                 hasChildren == center.hasChildren &&
                 hasPrimary == center.hasPrimary &&
                 hasSecondary == center.hasSecondary &&
                 hasHighSchool == center.hasHighSchool &&
                 hasVocationalTraining == center.hasVocationalTraining &&
                 hasUniversity == center.hasUniversity &&
-                Objects.equals(name, center.name) &&
-                Objects.equals(address, center.address) &&
-                Objects.equals(description, center.description);
+                name.equals(center.name);
+                /*Objects.equals(address, center.address) &&*/
+               /* Objects.equals(description, center.description);*/
     }
 
     @Override
@@ -191,4 +192,9 @@ public class Center implements Parcelable {
                 hasVocationalTraining, hasUniversity, description, location);
     }
 
+    @Override
+    public int compareTo(@NonNull Object o) {
+        Center c = (Center)o;
+        return this.getName().toLowerCase().compareTo(c.getName().toLowerCase());
+    }
 }

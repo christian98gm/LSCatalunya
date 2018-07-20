@@ -42,7 +42,8 @@
                         android:backgroundTint="@android:color/transparent"
                         android:contentDescription="@string/login"
                         android:src="@drawable/ic_menu_login"
-                        android:layout_centerVertical="true"/>
+                        android:layout_centerVertical="true"
+                        android:onClick="login"/>
 
                     <ImageButton
                         android:id="@+id/mapCenterList"

@@ -151,6 +151,11 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     }
 
+    public void login(View view){
+        Intent intent = new Intent(this,LoginActivity.class);
+        startActivity(intent);
+    }
+
     private void updateMapMarkers() {
         if(map != null) {
             ArrayList<Center> centers = new ArrayList<>();

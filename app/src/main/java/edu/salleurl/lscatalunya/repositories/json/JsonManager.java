@@ -20,6 +20,7 @@ public class JsonManager {
     private final static String VOCATIONAL_TRAINING_PARAM = "isFP";
     private final static String UNIVERSITY_PARAM = "isUniversitat";
     private final static String DESCRIPTION_PARAM = "description";
+    private final static String PROVINCE_PARAM = "province";
 
     //Json data
     private JSONObject jsonObject;
@@ -49,6 +50,7 @@ public class JsonManager {
             center.setVocationalTraining(jsonObject.getInt(VOCATIONAL_TRAINING_PARAM) == 1);
             center.setUniversity(jsonObject.getInt(UNIVERSITY_PARAM) == 1);
             center.setDescription(jsonObject.getString(DESCRIPTION_PARAM));
+            center.setProvince(jsonObject.getString(PROVINCE_PARAM));
         } catch(JSONException e) {
             throw new JsonException(JsonException.READ_ERROR);
         }

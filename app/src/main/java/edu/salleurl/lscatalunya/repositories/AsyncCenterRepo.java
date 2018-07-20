@@ -6,7 +6,8 @@ public interface AsyncCenterRepo {
 
     interface Callback {
         void onGetCentersResponse(Center center, int errorCode, boolean endInformation);
-        void onAddCenterResponse(String msg, int success);
+        void onAddCenterResponse(String msg, int type);
+        void onDeleteCenterResponse(String msg, int type);
     }
 
     void getCenters();

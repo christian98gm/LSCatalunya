@@ -73,4 +73,14 @@
     <string name="sort">Sort</string>
     <string name="pass_not_match">Passwords don\'t match</string>
     <string name="invalid_param">One or more fields are invalid or already registered</string>
+    <string name="alert">Alert</string>
+    <string name= "ok">OK</string>
+    <string name= "successful_introduction">The introduction of the new school was successful!</string>
+    <string name= "wait">Wait..</string>
+    <string name= "delete">DELETE</string>
+    <string name= "undo">UNDO</string>
+    <string name= "delete_item_list">Are you sure you want to delete the item from this list?</string>
+    <string name= "yes">YES</string>
+    <string name= "no">NO</string>
+    <string name= "successful_deletion">The deletion of the school was successful!</string>
 </resources>

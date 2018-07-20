@@ -12,7 +12,7 @@ import edu.salleurl.lscatalunya.model.Center;
 import edu.salleurl.lscatalunya.repositories.AsyncCenterRepo;
 
 /*Descripció centre. Surt quan es clica objecte CenterListActivity(DEFAULT LAUNCHER)*/
-public class CenterActivity extends AppCompatActivity implements AsyncCenterRepo.Callback{
+public class CenterActivity extends AppCompatActivity{
 
     public final static String CENTER_EXTRA = "centerExtra";
     private final static String CENTER_KEY = "centerKey";
@@ -84,13 +84,4 @@ public class CenterActivity extends AppCompatActivity implements AsyncCenterRepo
         super.onSaveInstanceState(outState);
     }
 
-    @Override
-    public void onAddCenterResponse(String msg, int success) {
-
-    }
-
-    @Override
-    public void onGetCentersResponse(Center center, int errorCode, boolean endInformation) {
-
-    }
 }

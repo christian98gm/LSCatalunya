@@ -1,10 +1,12 @@
 package edu.salleurl.lscatalunya.activities;
 
 
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.Window;
@@ -15,6 +17,7 @@ import android.widget.Toast;
 
 import edu.salleurl.lscatalunya.R;
 import edu.salleurl.lscatalunya.model.Center;
+import edu.salleurl.lscatalunya.model.CenterManager;
 import edu.salleurl.lscatalunya.repositories.AsyncCenterRepo;
 import edu.salleurl.lscatalunya.repositories.impl.CenterWebService;
 
@@ -24,8 +27,11 @@ public class CreateCenterActivity extends AppCompatActivity implements View.OnCl
     private boolean[] disabledButtons;
     private int[] buttonsBackgroundColor;
     private final static String CREATE_CENTER = "createCenterExtra";
-    public final static String SPINNER_INFO = "spinnerInfo";
-    public final static String BACKGROUND_INFO = "backgroundInfo";
+    private final static String SPINNER_INFO = "spinnerInfo";
+    private final static String BACKGROUND_INFO = "backgroundInfo";
+    private final static String DIALOG_INFO = "dialogInfo";
+    private int dialogActive = -1;
+    private Toast toastWait;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -69,6 +75,10 @@ public class CreateCenterActivity extends AppCompatActivity implements View.OnCl
             createCenterProvince.setSelection(savedInstanceState.getInt(SPINNER_INFO));
             createCenterDescription.setText(center.getDescription());
             buttonsBackgroundColor = savedInstanceState.getIntArray(BACKGROUND_INFO);
+            dialogActive = savedInstanceState.getInt(DIALOG_INFO);
+            if(dialogActive != -1){
+                dialogInfo(dialogActive);
+            }
         }
 
 
@@ -92,6 +102,7 @@ public class CreateCenterActivity extends AppCompatActivity implements View.OnCl
         super.onSaveInstanceState(outState);
         outState.putInt(SPINNER_INFO, ((Spinner)findViewById(R.id.create_center_province)).getSelectedItemPosition());
         outState.putIntArray(BACKGROUND_INFO, buttonsBackgroundColor);
+        outState.putInt(DIALOG_INFO, dialogActive);
     }
 
     @Override
@@ -154,6 +165,8 @@ public class CreateCenterActivity extends AppCompatActivity implements View.OnCl
             case R.id.create_center_button:
                 saveInfo();
                 CenterWebService.getInstance(this,this).addCenter(center);
+                toastWait =  Toast.makeText(this,getString(R.string.wait), Toast.LENGTH_SHORT);
+                toastWait.show();
                 break;
         }
     }
@@ -178,21 +191,45 @@ public class CreateCenterActivity extends AppCompatActivity implements View.OnCl
 
     }
     @Override
-    public void onAddCenterResponse(String msg, int typeResponse) {
+    public void onAddCenterResponse(String msg, int type) {
+        dialogActive = type;
+        if(type == 1){
+            CenterManager.getInstance().addCenter(center);
+        }
+        dialogInfo(type);
+    }
+
+    @Override
+    public void onDeleteCenterResponse(String msg, int type) {
+
+    }
+
+    private void dialogInfo(int typeResponse){
+        AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+        alertDialog.setTitle(getString(R.string.alert));
         switch (typeResponse){
             case 0:
-                Toast.makeText(this, "fail", Toast.LENGTH_SHORT).show();
+                alertDialog.setMessage(getString(R.string.format_error));
                 break;
             case 1:
-                Toast.makeText(this, "good", Toast.LENGTH_SHORT).show();
+                alertDialog.setMessage(getString(R.string.successful_introduction));
                 break;
             case 2:
-                Toast.makeText(this, "json", Toast.LENGTH_SHORT).show();
+                alertDialog.setMessage(getString(R.string.read_error));
                 break;
             case 3:
-                Toast.makeText(this, "volley", Toast.LENGTH_SHORT).show();
+                alertDialog.setMessage(getString( R.string.connection_error));
                 break;
         }
+        toastWait.cancel();
+        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, getString(R.string.ok),
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        finish(); //Tornem a activitat anterior.
+                    }
+                });
+        alertDialog.show();
     }
     @Override
     public void onGetCentersResponse(Center center, int errorCode, boolean endInformation) {
