@@ -1,6 +1,5 @@
 package edu.salleurl.lscatalunya.activities;
 
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentManager;
@@ -17,7 +16,6 @@ import android.view.View;
 import android.widget.Toast;
 
 import edu.salleurl.lscatalunya.R;
-import edu.salleurl.lscatalunya.fragment.RecyclerFragmentCenterList;
 import edu.salleurl.lscatalunya.fragment.RecyclerFragmentCenterManager;
 import edu.salleurl.lscatalunya.holders.CenterHolder;
 import edu.salleurl.lscatalunya.model.Center;
@@ -184,7 +182,7 @@ public class CenterManagementListActivity extends AppCompatActivity implements R
             CenterManager.getInstance().getCenters().remove(deletedItem);
             final RecyclerView recyclerView = findViewById(R.id.centerListItems);
             recyclerView.getAdapter().notifyItemRemoved(deletedIndex);
-            recyclerView.getAdapter().notifyDataSetChanged();
+            CenterManager.getInstance().deleteCenterAux(deletedItem);
             createConfirmationDeleteDialog(recyclerView);
         }
     }
@@ -195,26 +193,27 @@ public class CenterManagementListActivity extends AppCompatActivity implements R
         builder.setMessage(getString(R.string.delete_item_list));
         builder.setPositiveButton(getString(R.string.no), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
-                dialogYES(dialog, recyclerView);
+                dialogNO(dialog, recyclerView);
 
             }
         });
         builder.setNegativeButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                dialogNO(dialog);
+                dialogYES(dialog);
 
             }
         });
         exitDialog = builder.show();
     }
-    private void dialogYES(DialogInterface dialog, RecyclerView recyclerView){
+    private void dialogNO(DialogInterface dialog, RecyclerView recyclerView){
         CenterManager.getInstance().getCenters().add(deletedIndex,deletedItem);
         recyclerView.getAdapter().notifyItemInserted(deletedIndex);
+        CenterManager.getInstance().addCenterAux(deletedItem);
         dialog.dismiss();
     }
 
-    private void dialogNO(DialogInterface dialog){
+    private void dialogYES(DialogInterface dialog){
         CenterWebService.getInstance(this,this).newContext(this);
         CenterWebService.getInstance(this, this).deleteCenter(deletedItem);
         dialog.dismiss();

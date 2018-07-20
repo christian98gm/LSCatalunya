@@ -138,6 +138,7 @@ public class CenterListActivity extends FragmentActivity implements AsyncCenterR
         if(endInformation) {
             progressBar.setVisibility(View.GONE);
             pagerAdapter.endRefreshing();
+            centerManager.setProvince(String.valueOf(spinner.getSelectedItem()));
         }
 
     }

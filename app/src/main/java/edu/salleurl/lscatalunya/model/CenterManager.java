@@ -67,6 +67,23 @@ public class CenterManager {
 
     }
 
+    public void deleteCenterAux(Center center){
+        if(center.hasChildren() || center.hasPrimary() || center.hasSecondary()) {
+            schools.remove(center);
+        }
+        if(center.hasHighSchool() || center.hasVocationalTraining() || center.hasUniversity()) {
+            others.remove(center);
+        }
+    }
+    public void addCenterAux(Center center){
+        if(center.hasChildren() || center.hasPrimary() || center.hasSecondary()) {
+            schools.add(center);
+        }
+        if(center.hasHighSchool() || center.hasVocationalTraining() || center.hasUniversity()) {
+            others.add(center);
+        }
+    }
+
     public void setProvince(String province) {
 
         this.province = province;
