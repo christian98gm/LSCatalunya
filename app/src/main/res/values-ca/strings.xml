@@ -80,4 +80,5 @@
     <string name= "yes">SI</string>
     <string name= "no">NO</string>
     <string name= "successful_deletion">Escola esborrada correctament!</string>
+    <string name="invalid_user">Usuari o contrasenya no valids</string>
 </resources>

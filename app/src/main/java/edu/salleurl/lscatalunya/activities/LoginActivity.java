@@ -14,6 +14,7 @@ import edu.salleurl.lscatalunya.repositories.impl.DBHelper;
 public class LoginActivity extends AppCompatActivity {
 
     EditText user, pass;
+    TextInputLayout tilUser,tilPass;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,6 +23,8 @@ public class LoginActivity extends AppCompatActivity {
 
         user = findViewById(R.id.user_name_etx);
         pass = findViewById(R.id.password_etx);
+        tilUser = findViewById(R.id.user_til_login);
+        tilPass = findViewById(R.id.pass_til_login);
     }
 
     public void login(View view) {
@@ -30,11 +33,13 @@ public class LoginActivity extends AppCompatActivity {
 
         if (dbHelper.userRegistered(user.getText().toString(), pass.getText().toString())) {
             Intent intent = new Intent(this, CenterManagementListActivity.class);
+            user.setText("");
+            pass.setText("");
+            tilUser.setErrorEnabled(false);
+            tilPass.setErrorEnabled(false);
             startActivity(intent);
         } else {
-            TextInputLayout tilUser = findViewById(R.id.user_til_login);
             tilUser.setError(" ");
-            TextInputLayout tilPass = findViewById(R.id.pass_til_login);
             tilPass.setError("Invalid user or password");
             tilUser.setErrorEnabled(true);
             tilPass.setErrorEnabled(true);
@@ -45,14 +50,4 @@ public class LoginActivity extends AppCompatActivity {
         Intent intent = new Intent(this, RegisterActivity.class);
         startActivity(intent);
     }
-
-    public void loginFB(View view) {
-    }
-
-    public void loginTWT(View view) {
-    }
-
-    public void loginGOG(View view) {
-    }
-
 }

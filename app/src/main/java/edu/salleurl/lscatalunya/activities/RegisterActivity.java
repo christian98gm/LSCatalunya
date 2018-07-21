@@ -14,6 +14,11 @@ import edu.salleurl.lscatalunya.repositories.impl.DBHelper;
 public class RegisterActivity extends AppCompatActivity {
 
     EditText user, name, surname, email, pass, passconf;
+    private TextInputLayout tilUser;
+    private TextInputLayout tilPass;
+    private TextInputLayout tilName;
+    private TextInputLayout tilSurn;
+    private TextInputLayout tilEmail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,13 +40,24 @@ public class RegisterActivity extends AppCompatActivity {
             DBHelper dbHelper = new DBHelper(this);
             if (dbHelper.insertUser(user.getText().toString(), pass.getText().toString(), name.getText().toString(), surname.getText().toString(), email.getText().toString())) {
                 Intent intent = new Intent(this, CenterManagementListActivity.class);
+                user.setText("");
+                name.setText("");
+                surname.setText("");
+                email.setText("");
+                pass.setText("");
+                passconf.setText("");
+                tilUser.setErrorEnabled(false);
+                tilPass.setErrorEnabled(false);
+                tilName.setErrorEnabled(false);
+                tilSurn.setErrorEnabled(false);
+                tilEmail.setErrorEnabled(false);
                 startActivity(intent);
             } else {
-                TextInputLayout tilUser = findViewById(R.id.user_til_register);
-                TextInputLayout tilPass = findViewById(R.id.pass_til_register);
-                TextInputLayout tilName = findViewById(R.id.name_til_register);
-                TextInputLayout tilSurn = findViewById(R.id.surname_til_register);
-                TextInputLayout tilEmail = findViewById(R.id.email_til_register);
+                tilUser = findViewById(R.id.user_til_register);
+                tilPass = findViewById(R.id.pass_til_register);
+                tilName = findViewById(R.id.name_til_register);
+                tilSurn = findViewById(R.id.surname_til_register);
+                tilEmail = findViewById(R.id.email_til_register);
                 tilUser.setError(getResources().getString(R.string.invalid_param));
                 tilPass.setError(" ");
                 tilName.setError(" ");
