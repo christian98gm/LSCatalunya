@@ -57,6 +57,7 @@ public class RegisterActivity extends AppCompatActivity {
                 tilSur.setErrorEnabled(false);
                 tilEmail.setErrorEnabled(false);
                 startActivity(intent);
+                finish();
             } else {
                 tilUser.setError(getResources().getString(R.string.invalid_param));
                 tilPass.setError(" ");

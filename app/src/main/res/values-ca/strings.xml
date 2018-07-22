@@ -70,7 +70,7 @@
     <string name="sort">Ordenar</string>
     <string name="pass_not_match">Les contrasenyes no coincideixen</string>
     <string name="invalid_param">Un o més camps incorrectes o ja registrats</string>
-    <string name="alert">Alerta</string>
+    <string name="alert">Avís</string>
     <string name= "ok">OK</string>
     <string name= "successful_introduction">Nova escola introduida correctament!</string>
     <string name= "wait">Esperi…</string>
