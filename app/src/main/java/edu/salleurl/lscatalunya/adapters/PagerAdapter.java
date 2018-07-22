@@ -10,7 +10,7 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import java.util.ArrayList;
 
 import edu.salleurl.lscatalunya.R;
-import edu.salleurl.lscatalunya.fragment.RecyclerFragmentCenterList;
+import edu.salleurl.lscatalunya.fragments.RecyclerFragmentCenterList;
 import edu.salleurl.lscatalunya.model.Center;
 
 public class PagerAdapter extends FragmentStatePagerAdapter {

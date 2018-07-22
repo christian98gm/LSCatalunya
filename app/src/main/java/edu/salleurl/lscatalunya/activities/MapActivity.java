@@ -152,7 +152,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     }
 
     public void login(View view){
-        Intent intent = new Intent(this,LoginActivity.class);
+        Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
     }
 

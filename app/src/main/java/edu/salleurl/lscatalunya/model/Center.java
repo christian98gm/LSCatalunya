@@ -174,16 +174,13 @@ public class Center implements Parcelable, Comparable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Center center = (Center) o;
-        return /*id == center.id &&*/
-                hasChildren == center.hasChildren &&
+        return hasChildren == center.hasChildren &&
                 hasPrimary == center.hasPrimary &&
                 hasSecondary == center.hasSecondary &&
                 hasHighSchool == center.hasHighSchool &&
                 hasVocationalTraining == center.hasVocationalTraining &&
                 hasUniversity == center.hasUniversity &&
                 name.equals(center.name);
-                /*Objects.equals(address, center.address) &&*/
-               /* Objects.equals(description, center.description);*/
     }
 
     @Override
@@ -197,4 +194,5 @@ public class Center implements Parcelable, Comparable {
         Center c = (Center)o;
         return this.getName().toLowerCase().compareTo(c.getName().toLowerCase());
     }
+
 }

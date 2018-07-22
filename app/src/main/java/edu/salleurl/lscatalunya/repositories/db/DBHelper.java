@@ -1,9 +1,8 @@
-package edu.salleurl.lscatalunya.repositories.impl;
+package edu.salleurl.lscatalunya.repositories.db;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.DatabaseErrorHandler;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
@@ -52,7 +51,7 @@ public class DBHelper extends SQLiteOpenHelper{
         return false;
     }
 
-    public boolean userExists(String user, String email){
+    private boolean userExists(String user, String email){
 
         SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
         String[] args = {user, email};

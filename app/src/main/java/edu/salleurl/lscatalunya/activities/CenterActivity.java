@@ -9,7 +9,6 @@ import android.widget.TextView;
 
 import edu.salleurl.lscatalunya.R;
 import edu.salleurl.lscatalunya.model.Center;
-import edu.salleurl.lscatalunya.repositories.AsyncCenterRepo;
 
 /*Descripció centre. Surt quan es clica objecte CenterListActivity(DEFAULT LAUNCHER)*/
 public class CenterActivity extends AppCompatActivity{

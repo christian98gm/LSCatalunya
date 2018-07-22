@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 
 import edu.salleurl.lscatalunya.R;
-import edu.salleurl.lscatalunya.fragment.RecyclerClickManager;
+import edu.salleurl.lscatalunya.fragments.RecyclerClickManager;
 import edu.salleurl.lscatalunya.holders.CenterHolder;
 import edu.salleurl.lscatalunya.model.Center;
 

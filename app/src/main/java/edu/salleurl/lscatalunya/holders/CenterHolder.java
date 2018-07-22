@@ -18,7 +18,6 @@ public class CenterHolder extends RecyclerView.ViewHolder {
     private TextView highSchool;
     private TextView vocationalTraining;
     private TextView university;
-    private RelativeLayout viewBackground;
     private RelativeLayout viewForeground;
 
     public CenterHolder(View itemView) {
@@ -31,7 +30,6 @@ public class CenterHolder extends RecyclerView.ViewHolder {
         highSchool = itemView.findViewById(R.id.centerListHighSchool);
         vocationalTraining = itemView.findViewById(R.id.centerListVocationalTraining);
         university = itemView.findViewById(R.id.centerListUniversity);
-        viewBackground = itemView.findViewById(R.id.view_background);
         viewForeground = itemView.findViewById(R.id.view_foreground);
     }
 
@@ -67,19 +65,8 @@ public class CenterHolder extends RecyclerView.ViewHolder {
         university.setVisibility(show ? View.VISIBLE : View.GONE);
     }
 
-    public RelativeLayout getViewBackground() {
-        return viewBackground;
-    }
-
-    public void setViewBackground(RelativeLayout viewBackground) {
-        this.viewBackground = viewBackground;
-    }
-
     public RelativeLayout getViewForeground() {
         return viewForeground;
     }
 
-    public void setViewForeground(RelativeLayout viewForeground) {
-        this.viewForeground = viewForeground;
-    }
 }

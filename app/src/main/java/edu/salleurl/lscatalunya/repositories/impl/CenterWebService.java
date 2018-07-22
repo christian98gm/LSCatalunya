@@ -42,15 +42,8 @@ public class CenterWebService implements AsyncCenterRepo {
 
     //Url params
     private final static String GET_SCHOOLS_METHOD = "getSchools";
-    private final static String ADD_SCHOOL_METHOD = "addSchool";
-    private final static String DELETE_MESSAGE_METHOD = "deleteSchool";
+    private final static String DELETE_SCHOOL_METHOD = "deleteSchool";
     private final static String METHOD_PARAM = "method";
-    private final static String DESCRIPTION_PARAM = "description";
-    private final static String NAME_PARAM = "name";
-    private final static String ADDRESS_PARAM = "address";
-    private final static String PROVINCE_PARAM = "province";
-    private final static String TYPE_PARAM = "type";
-    private final static String DELETE_SCHOOLS_METHOD = "deleteSchool";
     private final static String PARAM_ID = "schoolId";
 
     //Attributes
@@ -65,11 +58,11 @@ public class CenterWebService implements AsyncCenterRepo {
     //Instance
     private static CenterWebService instance;
 
-    private CenterWebService(Context context, Callback Callback) {
+    private CenterWebService(Context context, Callback callback) {
         isFirstTime = true;
         requestQueue = Volley.newRequestQueue(context);
         this.context = context;
-        this.callback = Callback;
+        this.callback = callback;
     }
 
     public static CenterWebService getInstance(Context context, Callback Callback) {
@@ -172,9 +165,10 @@ public class CenterWebService implements AsyncCenterRepo {
         return location;
     }
 
+    @Override
     public void deleteCenter(Center center) {
         StringBuilder sb = new StringBuilder();
-        sb.append(URL).append("?").append(METHOD_PARAM).append("=").append(DELETE_MESSAGE_METHOD)
+        sb.append(URL).append("?").append(METHOD_PARAM).append("=").append(DELETE_SCHOOL_METHOD)
                 .append("&").append(PARAM_ID).append("=").append(center.getId());
         String url = sb.toString();
         StringRequest request = new StringRequest(Request.Method.GET, url,
@@ -198,7 +192,6 @@ public class CenterWebService implements AsyncCenterRepo {
         });
         requestQueue.add(request);
     }
-
 
     @Override
     public void addCenter(final Center center) {
@@ -250,5 +243,6 @@ public class CenterWebService implements AsyncCenterRepo {
         };
         queue.add(sr);
     }
+
 }
 
