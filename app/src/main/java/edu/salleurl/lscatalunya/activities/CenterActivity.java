@@ -18,6 +18,7 @@ public class CenterActivity extends AppCompatActivity{
     private final static String CENTER_KEY = "centerKey";
 
     private Center center;
+    private boolean isLogged;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -28,8 +29,10 @@ public class CenterActivity extends AppCompatActivity{
         if(savedInstanceState == null) {
             Intent intent = getIntent();
             center = intent.getParcelableExtra(CENTER_EXTRA);
+            isLogged = intent.getBooleanExtra(MapActivity.IS_LOGGED,false);
         } else {
             center = savedInstanceState.getParcelable(CENTER_KEY);
+            isLogged = savedInstanceState.getBoolean(MapActivity.IS_LOGGED);
         }
 
         //Set school name and address
@@ -73,6 +76,7 @@ public class CenterActivity extends AppCompatActivity{
         //Launch activity
         Intent intent = new Intent(this, MapActivity.class);
         intent.putExtra(MapActivity.CENTER_EXTRA, center);
+        intent.putExtra(MapActivity.IS_LOGGED, isLogged);
         startActivity(intent);
         finish();
 
@@ -81,6 +85,7 @@ public class CenterActivity extends AppCompatActivity{
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         outState.putParcelable(CENTER_KEY, center);
+        outState.putBoolean(MapActivity.IS_LOGGED,isLogged);
         super.onSaveInstanceState(outState);
     }
 
