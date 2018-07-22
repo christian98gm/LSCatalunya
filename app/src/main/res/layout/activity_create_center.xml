@@ -70,7 +70,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="2"
-                android:entries="@array/array_provinces"
+                android:entries="@array/provinces"
                 android:fontFamily="@font/roboto" />
 
             <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
