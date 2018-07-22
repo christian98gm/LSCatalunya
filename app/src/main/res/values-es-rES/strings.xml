@@ -28,8 +28,8 @@
     <string name="address_not_found">No se ha podido cargar la posición del centro</string>
     <string name="centers_not_found">No se ha podido cargar la posición de algunos centros</string>
     <string name="wait_refresh">Porfavor espere mientras se recargan los centros</string>
-    <string name="load_complete">Centro cargado correctamente!</string>
-    <string name="load_incomplete">Centro NO cargado correctamente!</string>
+    <string name="load_complete">Centros cargados correctamente!</string>
+    <string name="load_incomplete">Centros NO cargados correctamente!</string>
     <string-array name="provinces">
         <item>@string/barcelona</item>
         <item>@string/girona</item>
