@@ -2,7 +2,7 @@
 <resources>
     <string name="app_name">LSCatalunya</string>
     <string name="login">Login</string>
-    <string name="show_map">Mostra mapa</string>
+    <string name="show_map">Mostrar mapa</string>
     <string name="barcelona">Barcelona</string>
     <string name="girona">Girona</string>
     <string name="lleida">Lleida</string>
@@ -10,11 +10,11 @@
     <string name="all">Tots</string>
     <string name="schools">Escoles</string>
     <string name="others">Altres</string>
-    <string name="children">Nens</string>
+    <string name="children">Infantil</string>
     <string name="primary">Primaria</string>
-    <string name="secondary">Secundaria</string>
-    <string name="high_school">Institud</string>
-    <string name="vocational_training">Entrenament vocacional</string>
+    <string name="secondary">ESO</string>
+    <string name="high_school">Institut</string>
+    <string name="vocational_training">FP</string>
     <string name="university">Universitat</string>
     <string name="school_photo">Foto escola</string>
     <string name="connection_error">No ha pogut connectar-se als nostres serveis</string>
@@ -26,10 +26,10 @@
     <string name="wait_loading">Espera mentre es carreguen els centres</string>
     <string name="show_centers_list">Mostra la llista de centres</string>
     <string name="address_not_found">No s\'ha pogut carregar la posició del centre</string>
-    <string name="centers_not_found">La posició de alguns centres no s\'ha pogut carregar</string>
+    <string name="centers_not_found">La posició d\'alguns centres no s\'ha pogut carregar</string>
     <string name="wait_refresh">Espera mentre es recarreguen els centres</string>
     <string name="load_complete">Centre carregat correctament!</string>
-    <string name="load_incomplete">Centre carregat incorrectament!</string>
+    <string name="load_incomplete">Centre no carregat correctament!</string>
     <string-array name="provinces">
         <item>@string/barcelona</item>
         <item>@string/girona</item>
@@ -53,32 +53,32 @@
     </string-array>
     <string name="description">Descripció</string>
     <string name="create_school"> Crear Escola</string>
-    <string name="voc_training">Entrenament voc.</string>
+    <string name="voc_training">FP</string>
     <string name="school_state_province">Estat/Provincia de l\'escola</string>
     <string name="login_hint">Nom d\'usuari o correu</string>
     <string name="password">Contrasenya</string>
     <string name="log_in_button">ACCEDIR</string>
     <string name="register_button">REGISTRAR</string>
-    <string name="username_hint">Nom usuari</string>
+    <string name="username_hint">Nom d\'usuari</string>
     <string name="firstname_hint">Nom</string>
     <string name="lastname_hint">Cognom</string>
     <string name="email_hint">Correu</string>
     <string name="confirm_pass_hint">Confirmació contrasenya</string>
-    <string name="login_appbar_title">Acces per admin</string>
+    <string name="login_appbar_title">Accés per admin</string>
     <string name="register_appbar_title">Registrar nou admin</string>
     <string name="logout">Tancar sessió</string>
     <string name="sort">Ordenar</string>
-    <string name="pass_not_match">Contrasenyes no coincideixen</string>
+    <string name="pass_not_match">Les contrasenyes no coincideixen</string>
     <string name="invalid_param">Un o més camps incorrectes o ja registrats</string>
     <string name="alert">Alerta</string>
     <string name= "ok">OK</string>
     <string name= "successful_introduction">Nova escola introduida correctament!</string>
-    <string name= "wait">Esperi..</string>
+    <string name= "wait">Esperi…</string>
     <string name= "delete">ESBORRAR</string>
     <string name= "undo">DESFER</string>
-    <string name= "delete_item_list">Estas segur d\'esborrar l'Item?</string>
-    <string name= "yes">SI</string>
+    <string name= "delete_item_list">Estàs segur d\'esborrar l'element?</string>
+    <string name= "yes">SÍ</string>
     <string name= "no">NO</string>
     <string name= "successful_deletion">Escola esborrada correctament!</string>
-    <string name="invalid_user">Usuari o contrasenya no valids</string>
+    <string name="invalid_user">Usuari o contrasenya no vàlids</string>
 </resources>

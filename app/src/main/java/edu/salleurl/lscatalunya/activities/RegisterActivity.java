@@ -31,12 +31,17 @@ public class RegisterActivity extends AppCompatActivity {
         email = findViewById(R.id.email_register_etx);
         pass = findViewById(R.id.pass_register_etx);
         passConf = findViewById(R.id.passconfirm_register_etx);
+        tilUser = findViewById(R.id.user_til_register);
+        tilPass = findViewById(R.id.pass_til_register);
+        tilName = findViewById(R.id.name_til_register);
+        tilSur = findViewById(R.id.surname_til_register);
+        tilEmail = findViewById(R.id.email_til_register);
 
     }
 
     public void register(View view) {
 
-        if (pass.getText().toString().equals(passConf.getText().toString())) {
+        if(pass.getText().toString().equals(passConf.getText().toString())) {
             DBHelper dbHelper = new DBHelper(this);
             if (dbHelper.insertUser(user.getText().toString(), pass.getText().toString(), name.getText().toString(), surname.getText().toString(), email.getText().toString())) {
                 Intent intent = new Intent(this, CenterManagementListActivity.class);
@@ -53,11 +58,6 @@ public class RegisterActivity extends AppCompatActivity {
                 tilEmail.setErrorEnabled(false);
                 startActivity(intent);
             } else {
-                tilUser = findViewById(R.id.user_til_register);
-                tilPass = findViewById(R.id.pass_til_register);
-                tilName = findViewById(R.id.name_til_register);
-                tilSur = findViewById(R.id.surname_til_register);
-                tilEmail = findViewById(R.id.email_til_register);
                 tilUser.setError(getResources().getString(R.string.invalid_param));
                 tilPass.setError(" ");
                 tilName.setError(" ");

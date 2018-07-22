@@ -32,7 +32,7 @@ public class LoginActivity extends AppCompatActivity {
 
         DBHelper dbHelper = new DBHelper(this);
 
-        if (dbHelper.userRegistered(user.getText().toString(), pass.getText().toString())) {
+        if(dbHelper.userRegistered(user.getText().toString(), pass.getText().toString())) {
             Intent intent = new Intent(this, CenterManagementListActivity.class);
             user.setText("");
             pass.setText("");
