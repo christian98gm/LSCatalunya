@@ -121,6 +121,7 @@ public class CenterManagementListActivity extends AppCompatActivity implements R
         if (!centerWebService.isWorking()) {
             Intent intent = new Intent(this, CenterActivity.class);
             intent.putExtra(CenterActivity.CENTER_EXTRA, center);
+            intent.putExtra(MapActivity.IS_LOGGED,true);
             startActivity(intent);
         } else {
             Toast.makeText(this, getString(R.string.wait_refresh), Toast.LENGTH_SHORT).show();

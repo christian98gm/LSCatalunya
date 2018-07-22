@@ -162,6 +162,7 @@ public class CenterListActivity extends FragmentActivity implements AsyncCenterR
         if(!centerWebService.isWorking()) {
             Intent intent = new Intent(this, CenterActivity.class);
             intent.putExtra(CenterActivity.CENTER_EXTRA, center);
+            intent.putExtra(MapActivity.IS_LOGGED,false);
             startActivity(intent);
         } else {
             if(centerWebService.isFirstTime()) {

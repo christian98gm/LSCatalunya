@@ -14,9 +14,11 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -44,6 +46,7 @@ import edu.salleurl.lscatalunya.model.CenterManager;
 public class MapActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     public final static String CENTER_EXTRA = "addressExtra";
+    public final static String IS_LOGGED = "isLogged";
     public final static String CLOSE_INTENT = "closeIntent";
 
     //Saved instance keys
@@ -120,6 +123,12 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                     Toast.makeText(this, getString(R.string.address_not_found), Toast.LENGTH_SHORT).
                             show();
                 }
+            }
+            ImageButton loginIB = findViewById(R.id.mapLogin);
+            if(intent.getBooleanExtra(IS_LOGGED,false)) {
+                loginIB.setClickable(false);
+                loginIB.setEnabled(false);
+                loginIB.setVisibility(View.INVISIBLE);
             }
 
         }
