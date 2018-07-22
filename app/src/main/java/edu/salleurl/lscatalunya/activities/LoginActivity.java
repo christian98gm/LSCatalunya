@@ -6,15 +6,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import edu.salleurl.lscatalunya.R;
-import edu.salleurl.lscatalunya.repositories.impl.DBHelper;
+import edu.salleurl.lscatalunya.repositories.db.DBHelper;
 
 public class LoginActivity extends AppCompatActivity {
 
-    EditText user, pass;
-    TextInputLayout tilUser,tilPass;
+    private EditText user;
+    private EditText pass;
+    private TextInputLayout tilUser;
+    private TextInputLayout tilPass;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +32,7 @@ public class LoginActivity extends AppCompatActivity {
 
         DBHelper dbHelper = new DBHelper(this);
 
-        if (dbHelper.userRegistered(user.getText().toString(), pass.getText().toString())) {
+        if(dbHelper.userRegistered(user.getText().toString(), pass.getText().toString())) {
             Intent intent = new Intent(this, CenterManagementListActivity.class);
             user.setText("");
             pass.setText("");
@@ -50,4 +51,5 @@ public class LoginActivity extends AppCompatActivity {
         Intent intent = new Intent(this, RegisterActivity.class);
         startActivity(intent);
     }
+
 }

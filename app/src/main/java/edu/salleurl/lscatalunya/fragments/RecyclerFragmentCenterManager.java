@@ -1,18 +1,11 @@
-package edu.salleurl.lscatalunya.fragment;
+package edu.salleurl.lscatalunya.fragments;
 
-
-import android.content.Context;
-import android.content.DialogInterface;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -21,7 +14,6 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -29,15 +21,9 @@ import edu.salleurl.lscatalunya.R;
 import edu.salleurl.lscatalunya.activities.ListActivity;
 import edu.salleurl.lscatalunya.activities.RefreshActivity;
 import edu.salleurl.lscatalunya.adapters.ListAdapter;
-import edu.salleurl.lscatalunya.holders.CenterHolder;
 import edu.salleurl.lscatalunya.listeners.RefreshListener;
 import edu.salleurl.lscatalunya.model.Center;
-import edu.salleurl.lscatalunya.model.CenterManager;
-import edu.salleurl.lscatalunya.repositories.AsyncCenterRepo;
-import edu.salleurl.lscatalunya.repositories.impl.CenterWebService;
-import edu.salleurl.lscatalunya.repositories.impl.RecyclerItemTouchHelper;
-
-
+import edu.salleurl.lscatalunya.adapters.RecyclerItemTouchHelper;
 
 public class RecyclerFragmentCenterManager extends Fragment implements RecyclerRefreshManager, RecyclerClickManager {
 
@@ -73,6 +59,7 @@ public class RecyclerFragmentCenterManager extends Fragment implements RecyclerR
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
+
         //Link list adapter
         ListAdapter listAdapter = new ListAdapter(centers, recyclerView, this);
         recyclerView.setAdapter(listAdapter);
@@ -81,15 +68,16 @@ public class RecyclerFragmentCenterManager extends Fragment implements RecyclerR
         RefreshListener refreshListener = new RefreshListener(this);
         swipeRefreshLayout.setOnRefreshListener(refreshListener);
 
-
-        ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new RecyclerItemTouchHelper(0, ItemTouchHelper.RIGHT, (RecyclerItemTouchHelper.RecyclerItemTouchHelperListener) getActivity());
+        ItemTouchHelper.SimpleCallback itemTouchHelperCallback =
+                new RecyclerItemTouchHelper(0, ItemTouchHelper.RIGHT,
+                        (RecyclerItemTouchHelper.RecyclerItemTouchHelperListener) getActivity());
         new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(recyclerView);
 
-        ;
-
-        ItemTouchHelper.SimpleCallback itemTouchHelperCallback1 = new ItemTouchHelper.SimpleCallback(0,  ItemTouchHelper.LEFT ) {
+        ItemTouchHelper.SimpleCallback itemTouchHelperCallback1 =
+                new ItemTouchHelper.SimpleCallback(0,  ItemTouchHelper.LEFT ) {
             @Override
-            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder,
+                                  RecyclerView.ViewHolder target) {
                 return false;
             }
 

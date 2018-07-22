@@ -40,9 +40,6 @@ public class CenterListActivity extends FragmentActivity implements AsyncCenterR
     //Web service
     private CenterWebService centerWebService;
 
-    //Aux
-    private boolean isCreated;
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
 
@@ -144,14 +141,10 @@ public class CenterListActivity extends FragmentActivity implements AsyncCenterR
     }
 
     @Override
-    public void onAddCenterResponse(String msg, int type) {
-
-    }
+    public void onAddCenterResponse(String msg, int type) {}
 
     @Override
-    public void onDeleteCenterResponse(String msg, int type) {
-
-    }
+    public void onDeleteCenterResponse(String msg, int type) {}
 
     @Override
     public boolean refreshActivity() {
@@ -184,7 +177,6 @@ public class CenterListActivity extends FragmentActivity implements AsyncCenterR
         if(!centerWebService.isWorking()) {
             Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
-
         } else {
             if(centerWebService.isFirstTime()) {
                 Toast.makeText(this, getString(R.string.wait_loading), Toast.LENGTH_SHORT).show();

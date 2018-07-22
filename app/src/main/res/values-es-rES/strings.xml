@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">LSCatalunya</string>
+    <string name="login">Login</string>
+    <string name="show_map">Mostrar mapa</string>
+    <string name="barcelona">Barcelona</string>
+    <string name="girona">Gerona</string>
+    <string name="lleida">Lérida</string>
+    <string name="tarragona">Tarragona</string>
+    <string name="all">Todos</string>
+    <string name="schools">Escuelas</string>
+    <string name="others">Otros</string>
+    <string name="children">Infantil</string>
+    <string name="primary">Primaria</string>
+    <string name="secondary">ESO</string>
+    <string name="high_school">Instituto</string>
+    <string name="vocational_training">FP</string>
+    <string name="university">Universidad</string>
+    <string name="school_photo">Fotografía escuela</string>
+    <string name="connection_error">No se ha podido conectar a nuestros servicios</string>
+    <string name="format_error">Información del centro corrupta</string>
+    <string name="read_error">No se ha podido leer la información del centro</string>
+    <string name="add_error">No se ha podido añadir la escuela a nuestros servicios</string>
+    <string name="delete_error">No se ha podido eliminar la escuela de nuestros servicios</string>
+    <string name="loading_centers">Cargando los centros de La Salle Catalunya</string>
+    <string name="wait_loading">Esperando a que se carguen los centros</string>
+    <string name="show_centers_list">Mostrar la lista de centros</string>
+    <string name="address_not_found">No se ha podido cargar la posición del centro</string>
+    <string name="centers_not_found">No se ha podido cargar la posición de algunos centros</string>
+    <string name="wait_refresh">Porfavor espere mientras se recargan los centros</string>
+    <string name="load_complete">Centro cargado correctamente!</string>
+    <string name="load_incomplete">Centro NO cargado correctamente!</string>
+    <string-array name="provinces">
+        <item>@string/barcelona</item>
+        <item>@string/girona</item>
+        <item>@string/lleida</item>
+        <item>@string/tarragona</item>
+    </string-array>
+    <string-array name="center_types">
+        <item>@string/all</item>
+        <item>@string/schools</item>
+        <item>@string/others</item>
+    </string-array>
+    <string name="google_maps_api_key">AIzaSyAprP-uJv4hnhyd_6svpjTT3S75XEp-owo</string>
+    <string name="create_new_school">Crear nueva escuela</string>
+    <string name="school_name">Nombre de la escuela</string>
+    <string name="school_address">Dirección de la escuela</string>
+    <string name="description">Descripción</string>
+    <string name="create_school">Crear Escuela</string>
+    <string name="voc_training">FP</string>
+    <string name="school_state_province">Estado/Provincia de la escuela</string>
+    <string name="login_hint">Nombre de usuario o correo</string>
+    <string name="password">Contraseña</string>
+    <string name="log_in_button">ACCEDER</string>
+    <string name="register_button">REGISTRAR</string>
+    <string name="username_hint">Nombre de usuario</string>
+    <string name="firstname_hint">Nombre</string>
+    <string name="lastname_hint">Apellido</string>
+    <string name="email_hint">Correo</string>
+    <string name="confirm_pass_hint">Confirmación contraseña</string>
+    <string name="login_appbar_title">Acceso para admin</string>
+    <string name="register_appbar_title">Registrar nuevo admin</string>
+    <string name="logout">Cerrar sessión</string>
+    <string name="sort">Ordenar</string>
+    <string name="pass_not_match">Las contraseñas no coinciden</string>
+    <string name="invalid_param">Uno o más campos incorrectos/ Ya están registrados</string>
+    <string name="alert">Aviso</string>
+    <string name= "ok">OK</string>
+    <string name= "successful_introduction">Nueva escuela introducida correctamente!</string>
+    <string name= "wait">Espere…</string>
+    <string name= "delete">ELIMINAR</string>
+    <string name= "undo">DESHACER</string>
+    <string name= "delete_item_list">Está usted seguro de querer eliminar este elemento?</string>
+    <string name= "yes">SÍ</string>
+    <string name= "no">NO</string>
+    <string name= "successful_deletion">Escuela eliminada correctamente!</string>
+    <string name="invalid_user">Usuario o contraseña no válidos</string>
+</resources>

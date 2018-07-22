@@ -1,6 +1,5 @@
 package edu.salleurl.lscatalunya.activities;
 
-
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -9,7 +8,6 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.view.Window;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -21,17 +19,18 @@ import edu.salleurl.lscatalunya.model.CenterManager;
 import edu.salleurl.lscatalunya.repositories.AsyncCenterRepo;
 import edu.salleurl.lscatalunya.repositories.impl.CenterWebService;
 
-public class CreateCenterActivity extends AppCompatActivity implements View.OnClickListener, AsyncCenterRepo.Callback{
+public class CreateCenterActivity extends AppCompatActivity implements View.OnClickListener,
+        AsyncCenterRepo.Callback{
 
-    private Center center;
-    private boolean[] disabledButtons;
-    private int[] buttonsBackgroundColor;
     private final static String CREATE_CENTER = "createCenterExtra";
     private final static String SPINNER_INFO = "spinnerInfo";
     private final static String BACKGROUND_INFO = "backgroundInfo";
     private final static String DIALOG_INFO = "dialogInfo";
-    private int dialogActive = -1;
+
+    private Center center;
     private Toast toastWait;
+    private int[] buttonsBackgroundColor;
+    private int dialogActive = -1;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -42,7 +41,7 @@ public class CreateCenterActivity extends AppCompatActivity implements View.OnCl
         Button children = findViewById(R.id.button_children);
         Button primary = findViewById(R.id.button_primary);
         Button secondary = findViewById(R.id.button_secondary);
-        Button highschool= findViewById(R.id.button_high_school);
+        Button highSchool= findViewById(R.id.button_high_school);
         Button vocTraining = findViewById(R.id.button_vocational_training);
         Button university = findViewById(R.id.button_university);
         TextView createCenterName = findViewById(R.id.create_center_name);
@@ -56,7 +55,7 @@ public class CreateCenterActivity extends AppCompatActivity implements View.OnCl
             buttonsBackgroundColor[0] = ((ColorDrawable)children.getBackground()).getColor();
             buttonsBackgroundColor[1] = ((ColorDrawable)primary.getBackground()).getColor();
             buttonsBackgroundColor[2] = ((ColorDrawable)secondary.getBackground()).getColor();
-            buttonsBackgroundColor[3] = ((ColorDrawable)highschool.getBackground()).getColor();
+            buttonsBackgroundColor[3] = ((ColorDrawable)highSchool.getBackground()).getColor();
             buttonsBackgroundColor[4] = ((ColorDrawable)vocTraining.getBackground()).getColor();
             buttonsBackgroundColor[5] = ((ColorDrawable)university.getBackground()).getColor();
         }else{
@@ -67,7 +66,7 @@ public class CreateCenterActivity extends AppCompatActivity implements View.OnCl
             }
             if(center.hasPrimary())disabledAppearance(primary);
             if(center.hasSecondary())disabledAppearance(secondary);
-            if(center.hasHighSchool())disabledAppearance(highschool);
+            if(center.hasHighSchool())disabledAppearance(highSchool);
             if(center.hasVocationalTraining())disabledAppearance(vocTraining);
             if(center.hasUniversity())disabledAppearance(university);
             createCenterName.setText(center.getName());
@@ -81,13 +80,10 @@ public class CreateCenterActivity extends AppCompatActivity implements View.OnCl
             }
         }
 
-
-
-
         children.setOnClickListener(this);
         primary.setOnClickListener(this);
         secondary.setOnClickListener(this);
-        highschool.setOnClickListener(this);
+        highSchool.setOnClickListener(this);
         vocTraining.setOnClickListener(this);
         university.setOnClickListener(this);
         Button createCenter = findViewById(R.id.create_center_button);
@@ -181,15 +177,18 @@ public class CreateCenterActivity extends AppCompatActivity implements View.OnCl
         center.setProvince(createCenterProvince.getSelectedItem().toString());
         center.setDescription(createCenterDescription.getText().toString());
     }
+
     private void disabledAppearance (Button b){
         b.setBackgroundColor(Color.LTGRAY);
         b.setAlpha(0.15f);
     }
+
     private void buttonDefaultState(Button b, int type){
         b.setBackgroundColor(buttonsBackgroundColor[type]);
         b.setAlpha(1.0f);
 
     }
+
     @Override
     public void onAddCenterResponse(String msg, int type) {
         dialogActive = type;
@@ -200,9 +199,7 @@ public class CreateCenterActivity extends AppCompatActivity implements View.OnCl
     }
 
     @Override
-    public void onDeleteCenterResponse(String msg, int type) {
-
-    }
+    public void onDeleteCenterResponse(String msg, int type) {}
 
     private void dialogInfo(int typeResponse){
         AlertDialog alertDialog = new AlertDialog.Builder(this).create();
@@ -231,8 +228,10 @@ public class CreateCenterActivity extends AppCompatActivity implements View.OnCl
                 });
         alertDialog.show();
     }
+
     @Override
     public void onGetCentersResponse(Center center, int errorCode, boolean endInformation) {
         //Res
     }
+
 }

@@ -44,12 +44,6 @@
     <string name="create_new_school">Create a new school</string>
     <string name="school_name">School Name</string>
     <string name="school_address">School Address</string>
-    <string-array name="array_provinces">
-        <item>Lleida</item>
-        <item>Barcelona</item>
-        <item>Girona</item>
-        <item>Tarragona</item>
-    </string-array>
     <string name="description">Description</string>
     <string name="create_school">Create School</string>
     <string name="voc_training">Voc. Training</string>
@@ -73,10 +67,10 @@
     <string name="sort">Sort</string>
     <string name="pass_not_match">Passwords don\'t match</string>
     <string name="invalid_param">One or more fields are invalid or already registered</string>
-    <string name="alert">Alert</string>
+    <string name="alert">Notice</string>
     <string name= "ok">OK</string>
     <string name= "successful_introduction">The introduction of the new school was successful!</string>
-    <string name= "wait">Wait..</string>
+    <string name= "wait">Wait…</string>
     <string name= "delete">DELETE</string>
     <string name= "undo">UNDO</string>
     <string name= "delete_item_list">Are you sure you want to delete the item from this list?</string>

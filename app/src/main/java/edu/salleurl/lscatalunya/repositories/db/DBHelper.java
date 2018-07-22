@@ -1,9 +1,8 @@
-package edu.salleurl.lscatalunya.repositories.impl;
+package edu.salleurl.lscatalunya.repositories.db;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.DatabaseErrorHandler;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
@@ -37,8 +36,8 @@ public class DBHelper extends SQLiteOpenHelper{
     }
 
     public boolean insertUser(String user, String pass, String name, String surname, String email) {
-
-        if (!userExists(user, email) && !user.isEmpty() && !pass.isEmpty() && !name.isEmpty() && !surname.isEmpty() && !email.isEmpty()) {
+        if(!user.isEmpty() && !pass.isEmpty() && !name.isEmpty() && !surname.isEmpty() && !email.isEmpty() &&
+                !userExists(user, email)) {
             SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
             ContentValues contentValues = new ContentValues();
             contentValues.put(USERS_COLUMN_USER, user);
@@ -52,12 +51,12 @@ public class DBHelper extends SQLiteOpenHelper{
         return false;
     }
 
-    public boolean userExists(String user, String email){
+    private boolean userExists(String user, String email){
 
         SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
         String[] args = {user, email};
         Cursor c = sqLiteDatabase.rawQuery("SELECT * FROM " + USERS_TABLE_NAME + " WHERE " + USERS_COLUMN_USER + " =? " + " OR " + USERS_COLUMN_EMAIL + " =?", args);
-        if (c.moveToFirst()) {
+        if(c.moveToFirst()) {
             return true;
         }
         return false;

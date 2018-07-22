@@ -16,33 +16,33 @@ import android.view.View;
 import android.widget.Toast;
 
 import edu.salleurl.lscatalunya.R;
-import edu.salleurl.lscatalunya.fragment.RecyclerFragmentCenterManager;
+import edu.salleurl.lscatalunya.fragments.RecyclerFragmentCenterManager;
 import edu.salleurl.lscatalunya.holders.CenterHolder;
 import edu.salleurl.lscatalunya.model.Center;
 import edu.salleurl.lscatalunya.model.CenterManager;
 import edu.salleurl.lscatalunya.repositories.AsyncCenterRepo;
 import edu.salleurl.lscatalunya.repositories.impl.CenterWebService;
-import edu.salleurl.lscatalunya.repositories.impl.RecyclerItemTouchHelper;
+import edu.salleurl.lscatalunya.adapters.RecyclerItemTouchHelper;
 import edu.salleurl.lscatalunya.repositories.json.JsonException;
 
 public class CenterManagementListActivity extends AppCompatActivity implements RefreshActivity,
-        AsyncCenterRepo.Callback, ListActivity, View.OnClickListener,RecyclerItemTouchHelper.RecyclerItemTouchHelperListener {
+        AsyncCenterRepo.Callback, ListActivity, View.OnClickListener,
+        RecyclerItemTouchHelper.RecyclerItemTouchHelperListener {
 
-    private Toolbar toolbar;
+    private RecyclerFragmentCenterManager recyclerFragmentCenterManager;
     private CenterWebService centerWebService;
     private CenterManager centerManager;
-    private RecyclerFragmentCenterManager recyclerFragmentCenterManager;
+    private Center deletedItem;
+
+    private AlertDialog exitDialog;
     private int descending = 1;
     private int deletedIndex;
-    private Center deletedItem;
-    private AlertDialog exitDialog;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_center_management_list);
-        toolbar = findViewById(R.id.centerManagementToolbar);
+        Toolbar toolbar = findViewById(R.id.centerManagementToolbar);
         toolbar.inflateMenu(R.menu.menu);
         FloatingActionButton fab = findViewById(R.id.floating_button_add);
         fab.setOnClickListener(this);
@@ -69,7 +69,7 @@ public class CenterManagementListActivity extends AppCompatActivity implements R
         switch (item.getItemId()) {
             case R.id.sort:
                 centerManager.orderCenters(descending);
-                descending = descending == 1 ? 0:1;
+                descending = descending == 1 ? 0 : 1;
                 recyclerFragmentCenterManager.notifyDataSetChanged();
                 return true;
             case R.id.logout:
@@ -114,9 +114,8 @@ public class CenterManagementListActivity extends AppCompatActivity implements R
     }
 
     @Override
-    public void onAddCenterResponse(String msg, int type) {
-        //No afegim
-    }
+    public void onAddCenterResponse(String msg, int type) {}
+
     @Override
     public void showCenterContent(Center center) {
         if (!centerWebService.isWorking()) {
@@ -128,7 +127,6 @@ public class CenterManagementListActivity extends AppCompatActivity implements R
             Toast.makeText(this, getString(R.string.wait_refresh), Toast.LENGTH_SHORT).show();
         }
     }
-
 
     @Override
     public void onGetCentersResponse(Center center, int errorCode, boolean endInformation) {
@@ -169,12 +167,10 @@ public class CenterManagementListActivity extends AppCompatActivity implements R
                 break;
         }
     }
+
     @Override
     public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction, final int position) {
         if (viewHolder instanceof CenterHolder) {
-            // get the removed item name to display it in snack bar
-            String name = CenterManager.getInstance().getCenters().get(viewHolder.getAdapterPosition()).getName();
-
             // backup of removed item for undo purpose
             deletedItem = CenterManager.getInstance().getCenters().get(viewHolder.getAdapterPosition());
             deletedIndex = viewHolder.getAdapterPosition();
@@ -207,6 +203,7 @@ public class CenterManagementListActivity extends AppCompatActivity implements R
         });
         exitDialog = builder.show();
     }
+
     private void dialogNO(DialogInterface dialog, RecyclerView recyclerView){
         CenterManager.getInstance().getCenters().add(deletedIndex,deletedItem);
         recyclerView.getAdapter().notifyItemInserted(deletedIndex);
@@ -219,6 +216,7 @@ public class CenterManagementListActivity extends AppCompatActivity implements R
         CenterWebService.getInstance(this, this).deleteCenter(deletedItem);
         dialog.dismiss();
     }
+
     @Override
     public void onDeleteCenterResponse(String msg, int type) {
         switch (type){
@@ -235,6 +233,6 @@ public class CenterManagementListActivity extends AppCompatActivity implements R
                 Toast.makeText(this,getString( R.string.connection_error),Toast.LENGTH_SHORT).show();
                 break;
         }
-
     }
+
 }

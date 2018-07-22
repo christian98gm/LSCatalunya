@@ -1,15 +1,14 @@
-package edu.salleurl.lscatalunya.repositories.impl;
+package edu.salleurl.lscatalunya.adapters;
 
 import android.graphics.Canvas;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
 
-import edu.salleurl.lscatalunya.adapters.ListAdapter;
 import edu.salleurl.lscatalunya.holders.CenterHolder;
 
-
 public class RecyclerItemTouchHelper extends ItemTouchHelper.SimpleCallback {
+
     private RecyclerItemTouchHelperListener listener;
 
     public RecyclerItemTouchHelper(int dragDirs, int swipeDirs, RecyclerItemTouchHelperListener listener) {
@@ -18,7 +17,8 @@ public class RecyclerItemTouchHelper extends ItemTouchHelper.SimpleCallback {
     }
 
     @Override
-    public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+    public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder,
+                          RecyclerView.ViewHolder target) {
         return true;
     }
 
@@ -26,7 +26,6 @@ public class RecyclerItemTouchHelper extends ItemTouchHelper.SimpleCallback {
     public void onSelectedChanged(RecyclerView.ViewHolder viewHolder, int actionState) {
         if (viewHolder != null) {
             final View foregroundView = ((CenterHolder) viewHolder).getViewForeground();
-
             getDefaultUIUtil().onSelected(foregroundView);
         }
     }
@@ -51,7 +50,6 @@ public class RecyclerItemTouchHelper extends ItemTouchHelper.SimpleCallback {
                             RecyclerView.ViewHolder viewHolder, float dX, float dY,
                             int actionState, boolean isCurrentlyActive) {
         final View foregroundView = ((CenterHolder) viewHolder).getViewForeground();
-
         getDefaultUIUtil().onDraw(c, recyclerView, foregroundView, dX, dY,
                 actionState, isCurrentlyActive);
     }
@@ -69,6 +67,7 @@ public class RecyclerItemTouchHelper extends ItemTouchHelper.SimpleCallback {
     public interface RecyclerItemTouchHelperListener {
         void onSwiped(RecyclerView.ViewHolder viewHolder, int direction, int position);
     }
+
     @Override
     public int getSwipeDirs(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
         if (viewHolder instanceof CenterHolder) return  ItemTouchHelper.LEFT;

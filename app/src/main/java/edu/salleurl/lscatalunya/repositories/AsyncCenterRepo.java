@@ -11,6 +11,6 @@ public interface AsyncCenterRepo {
     }
 
     void getCenters();
-
     void addCenter(final Center center);
+    void deleteCenter(Center center);
 }

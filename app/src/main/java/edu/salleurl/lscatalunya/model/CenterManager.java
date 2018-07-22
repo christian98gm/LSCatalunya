@@ -16,7 +16,6 @@ public class CenterManager {
     private ArrayList<Center> othersIn;
     private String province;
 
-
     private CenterManager() {
         centers = new ArrayList<>();
         centersIn = new ArrayList<>();
@@ -112,6 +111,7 @@ public class CenterManager {
             }
         }
     }
+
     public void orderCenters(int type){
         if(type == 1){
             Collections.sort(centers);
